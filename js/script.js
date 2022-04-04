@@ -126,11 +126,11 @@ function prototypeFunctions(){
         for (let i = (this.Messages.length - 1); i > -1; i-=1){
             if(fromObj.Messages.length > 0){
                 if(this.id == fromObj.Messages[i].FromUserId){
-                    html += "<div class='message-to'>"+ fromObj.Messages[i].Message+"</div>";
+                    html += "<div class='message-to'><p>"+ fromObj.Messages[i].Message+"</p></div>";
                 }
             }
             if(this.Messages[i].FromUserId == fromObj.id){
-                html += "<div class='message-from'>"+this.Messages[i].Message+"</div>";
+                html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
             }
         }
         return html;
