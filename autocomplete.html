@@ -118,7 +118,6 @@
                 }
                 #FindSumbolsCount(str) {
                     let result = [[], []];
-                    debugger
                     for (let i = 0; i < str.length; i++) {
                         let index = result[0].indexOf(str[i]);
                         if (index == -1) {
@@ -247,7 +246,6 @@
 
             function changed() {
                 results = [];
-
                 words = input.value.split(" ");
 
                 array.forEach((f) => {
@@ -255,7 +253,7 @@
                         new Result(words[words.length - 1].toLowerCase(), f)
                     );
                 });
-
+                console.log(results)
                 // const result = results.reduce((max, obj) =>
                 //     max.GetIndexOfSimilarity() > obj.GetIndexOfSimilarity()
                 //         ? max
