@@ -156,7 +156,6 @@ function printFriend(obj){
     document.querySelector('.messenger-nav-2__friends').insertAdjacentHTML('beforeend',html)
 }
 function printChat(userID){
-    debugger
     localStorage.toUser = userID;
     let myObject = JSON.parse(localStorage.meUser)
     if(myObject.Friends.length == 0){
@@ -182,9 +181,16 @@ function printChat(userID){
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">`+message+`</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <textarea onkeypress="return checkKey(event.key)" class="messenger-main__message-text" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
+    <textarea class="messenger-main__message-text" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
     </button></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html
+    document.querySelector('.messenger-main__message-text').onkeydown = (e) =>{
+        if(e.key == 'Enter'){
+            sendMessage(userID);
+            document.querySelector('.messenger-main__message-text').value = "";
+            return false;
+        }
+    }
 }
 function printMessages(obj,fromObj){
     if(obj.Friends.length == 0){

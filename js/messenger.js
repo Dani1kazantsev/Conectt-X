@@ -17,12 +17,4 @@ sendRequest(requestURLusers).then(prototypeFunctions()).then(data =>{
     printMessages(me,me.Friends[0])
     infoCheck();
 })
-console.log(document.querySelector('textarea'))
-function checkKey(key){
-    console.log(localStorage.touser)
-    if(key == 'Enter'){
-        sendMessage(localStorage.toUser);
-        document.querySelector('.messenger-main__message-text').value = "";
-        return false;
-    }
-}
+
