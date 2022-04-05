@@ -17,9 +17,12 @@ sendRequest(requestURLusers).then(prototypeFunctions()).then(data =>{
     printMessages(me,me.Friends[0])
     infoCheck();
 })
-document.querySelector('.messenger-main__message-text').addEventListener('keypress',e=>{
-    if(e.keyCode == 13){
-        e.preventDefault()
-        
+console.log(document.querySelector('textarea'))
+function checkKey(key){
+    console.log(localStorage.touser)
+    if(key == 'Enter'){
+        sendMessage(localStorage.toUser);
+        document.querySelector('.messenger-main__message-text').value = "";
+        return false;
     }
-})
+}

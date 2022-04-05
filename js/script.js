@@ -128,10 +128,11 @@ function prototypeFunctions(){
                 html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
             }
             if(this.Messages[i].ToUserId == fromObj.id){
-                html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
+                 html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
             }    
         }
-        return html;
+            return html;
+        
     }
 }
 function printAccountInfo(obj){
@@ -155,6 +156,7 @@ function printFriend(obj){
     document.querySelector('.messenger-nav-2__friends').insertAdjacentHTML('beforeend',html)
 }
 function printChat(userID){
+    debugger
     localStorage.toUser = userID;
     let myObject = JSON.parse(localStorage.meUser)
     if(myObject.Friends.length == 0){
@@ -180,7 +182,7 @@ function printChat(userID){
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">`+message+`</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <textarea class="messenger-main__message-text" form="message" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
+    <textarea onkeypress="return checkKey(event.key)" class="messenger-main__message-text" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
     </button></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html
 }
@@ -207,12 +209,29 @@ function sendMessage(touserid){
     msg = new Messages(me,touserid,msg)
     let MessagesAll = [];
     MessagesAll.push(msg);
+    let MyMessagesAll = [];
+    MyMessagesAll.push(msg);
     sendRequest(requestURLusers).then(data =>{
+        allUsers = data;
         for (let i = 0; i < data.length; i++) {
             if(data[i].id == touserid){
                 for (let j = 0; j < data[i].Messages.length; j++) {
-                        MessagesAll.push(data[i].Messages[j])
+                    MessagesAll.push(data[i].Messages[j])
                 }
+            }
+            if(data[i].id == me){
+                for (let j = 0; j < data[i].Messages.length; j++) {
+                    MyMessagesAll.push(data[i].Messages[j])
+                }
+            }
+        }
+        for (let i = 0; i < allUsers.length; i++) {
+            if(allUsers[i].id == touserid){
+                allUsers[i].Messages = MessagesAll;
+            }
+            if(allUsers[i].id == me){
+                allUsers[i].Messages = MyMessagesAll;
+                localStorage.meUser = JSON.stringify(allUsers[i])
             }
         }
     }).then(e=>{
@@ -228,15 +247,13 @@ function sendMessage(touserid){
         fetch(requestURLusers +"/"+me,{
             method:"PATCH",
             body:JSON.stringify({
-                Messages:MessagesAll
+                Messages:MyMessagesAll
             }),
             headers: {
             'Content-type': 'application/json; charset=UTF-8',
             }
         })
     })
-    console.log(JSON.parse(localStorage.meUser))
-    sendRequestPost("POST",requestURLMessages,msg)
 }
 //register.js
 if(document.querySelector('.register-main__btn')){
