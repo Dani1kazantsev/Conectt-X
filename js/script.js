@@ -124,14 +124,12 @@ function prototypeFunctions(){
     Object.prototype.printMessagesClass = function(fromObj){
         let html = "";
         for (let i = 0; i < this.Messages.length; i++){
-            if((this.Messages[i].FromUserId == fromObj.id)||(this.Messages[i].ToUserId == fromObj.id)){
-                if(this.Messages[i].FromUserId == fromObj.id){
-                    html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
-                }
-                if(this.Messages[i].ToUserId == fromObj.id){
-                    html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
-                }
+            if(this.Messages[i].FromUserId == fromObj.id){
+                html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
             }
+            if(this.Messages[i].ToUserId == fromObj.id){
+                html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
+            }    
         }
         return html;
     }
@@ -166,7 +164,7 @@ function printChat(userID){
         if(myObject.Friends[i] == userID){
             for (let j = 0;j < allUsers.length; j++){
                 if(allUsers[j].id == userID){
-                    var obj = allUsers[j]
+                    var obj = allUsers[j];
                 }            
             }
         }
