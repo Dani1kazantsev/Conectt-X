@@ -17,9 +17,4 @@ sendRequest(requestURLusers).then(prototypeFunctions()).then(data =>{
     printMessages(me,me.Friends[0])
     infoCheck();
 })
-document.querySelector('.messenger-main__message-text').addEventListener('keypress',e=>{
-    if(e.keyCode == 13){
-        e.preventDefault()
-        
-    }
-})
+
