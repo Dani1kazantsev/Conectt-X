@@ -124,12 +124,14 @@ function prototypeFunctions(){
     Object.prototype.printMessagesClass = function(fromObj){
         let html = "";
         for (let i = 0; i < this.Messages.length; i++){
-            if(this.Messages[i].FromUserId == fromObj.id){
-                html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
+            if((this.Messages[i].FromUserId == fromObj.id)||(this.Messages[i].ToUserId == fromObj.id)){
+                if(this.Messages[i].FromUserId == fromObj.id){
+                    html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
+                }
+                if(this.Messages[i].ToUserId == fromObj.id){
+                    html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
+                }
             }
-            if(this.Messages[i].ToUserId == fromObj.id){
-                html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
-            }    
         }
         return html;
     }
@@ -164,7 +166,7 @@ function printChat(userID){
         if(myObject.Friends[i] == userID){
             for (let j = 0;j < allUsers.length; j++){
                 if(allUsers[j].id == userID){
-                    var obj = allUsers[j];
+                    var obj = allUsers[j]
                 }            
             }
         }
@@ -191,7 +193,7 @@ function printMessages(obj,fromObj){
     if(typeof fromObj == 'number'){
         for (let i = 0; i < allUsers.length; i++) {
             if(allUsers[i].id == fromObj){
-                fromObj = allUsers[i];
+                fromObj = allUsers[i]
             }      
         }
     }
@@ -205,8 +207,8 @@ function sendMessage(touserid){
         return
     }
     msg = new Messages(me,touserid,msg)
-    let MessagesAll = [];
-    MessagesAll.push(msg);
+    let MessagesAll = []
+    MessagesAll.push(msg)
     sendRequest(requestURLusers).then(data =>{
         for (let i = 0; i < data.length; i++) {
             if(data[i].id == touserid){
