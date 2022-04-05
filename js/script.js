@@ -205,8 +205,8 @@ function sendMessage(touserid){
         return
     }
     msg = new Messages(me,touserid,msg)
-    let MessagesAll = []
-    MessagesAll.push(msg)
+    let MessagesAll = [];
+    MessagesAll.push(msg);
     sendRequest(requestURLusers).then(data =>{
         for (let i = 0; i < data.length; i++) {
             if(data[i].id == touserid){
