@@ -185,7 +185,7 @@ function printChat(userID){
     <textarea class="messenger-main__message-text" form="message" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
     </button></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html
-}
+} 
 function printMessages(obj,fromObj){
     if(obj.Friends.length == 0){
         return
