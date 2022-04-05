@@ -206,6 +206,7 @@ function sendMessage(touserid){
     if(msg == ""){
         return
     }
+     
     msg = new Messages(me,touserid,msg)
     let MessagesAll = []
     MessagesAll.push(msg)

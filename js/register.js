@@ -12,7 +12,7 @@ document.querySelector('.login-main__btn').addEventListener('click',e=>{
                 alert("Такой логин или почта уже есть");
                 return;
             }
-        }
+        } 
         let obj = new User(loginValue,passwordValue,emailValue);
         printUser(obj);
         allUsers.push(obj);

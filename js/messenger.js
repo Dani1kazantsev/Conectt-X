@@ -10,7 +10,7 @@ sendRequest(requestURLusers).then(prototypeFunctions()).then(data =>{
             UserId = JSON.parse(localStorage.meUser).id
             localStorage.meUser = JSON.stringify(data[i])
         }
-    }
+    } 
     printAccountInfo(me);
     printFriend(me);
     printChat(me.Friends[0]);
