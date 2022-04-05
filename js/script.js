@@ -43,7 +43,7 @@ function sendRequestPost(method,url,body = null){
             body:JSON.stringify(body),
             credentials: 'include'
         })
-}
+} 
 function addFriend(id){
     let myid = JSON.parse(localStorage.meUser).id;
     let myFriends;
@@ -54,13 +54,13 @@ function addFriend(id){
                 myFriends = data[i].Friends;
             }
             if(data[i].id == id){
-                friendFriends = data[i].Friends
+                friendFriends = data[i].Friends;
             }
         }
     }).then(e=>{
         for (let i = 0; i < myFriends.length; i++) {
             if(myFriends.id == id){
-                return
+                return;
             }
         }
         for (let i = 0; i < allUsers.length; i++) {
@@ -107,8 +107,8 @@ function infoCheck(){
                     if(meObj.Messages.length <  data[i].Messages.length){
                         let allMessages = data[i].Messages;
                         meObj.Messages = allMessages;
-                        for (let j = 0; j < data[i].Messages.length; j++) {  
-                            if((data[i].Messages[j].FromUserId == localStorage.toUser)&&(data[i].Messages[j].ToUserId == meObj.id)){
+                        for (let j = 0; j < data[i].Messages.length; j++) {
+                            if((data[i].Messages[j].FromUserId == localStorage.toUser)&&(data[i].Messages[j].ToUserId == meObj.id)||(data[i].Messages[j].FromUserId == meObj.id)&&(data[i].Messages[j].ToUserId == localStorage.toUser)){
                                 let html = printMessages(meObj,fromUser);
                                 document.querySelector('.messenger-main__chat-list').innerHTML = html
                             }
@@ -123,14 +123,14 @@ function infoCheck(){
 function prototypeFunctions(){
     Object.prototype.printMessagesClass = function(fromObj){
         let html = "";
-        for (let i = (this.Messages.length - 1); i > -1; i-=1){
-            if(fromObj.Messages.length > 0){
-                if(this.id == fromObj.Messages[i].FromUserId){
-                    html += "<div class='message-to'><p>"+ fromObj.Messages[i].Message+"</p></div>";
+        for (let i = 0; i < this.Messages.length; i++){
+            if((this.Messages[i].FromUserId == fromObj.id)||(this.Messages[i].ToUserId == fromObj.id)){
+                if(this.Messages[i].FromUserId == fromObj.id){
+                    html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
                 }
-            }
-            if(this.Messages[i].FromUserId == fromObj.id){
-                html += "<div class='message-from'><p>"+this.Messages[i].Message+"</p></div>";
+                if(this.Messages[i].ToUserId == fromObj.id){
+                    html += "<div class='message-to'><p>"+this.Messages[i].Message+"</p></div>";
+                }
             }
         }
         return html;
@@ -182,7 +182,7 @@ function printChat(userID){
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">`+message+`</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <textarea class="messenger-main__message-text" form="message" placeholder="Message"></textarea><button type="reset" class="messenger-main__push" onclick='sendMessage(`+obj.id+`)'>
+    <textarea class="messenger-main__message-text" form="message" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
     </button></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html
 }
