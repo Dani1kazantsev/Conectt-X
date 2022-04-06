@@ -176,7 +176,7 @@ function printChat(userID){
     <button class="messenger-main__favorite"></button></div>
     <div class="messenger-main__settings"><div class="messenger-nav-2__search">
     <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
-    <button class="messenger-main__notification"></button>  <button class="messenger-main__other"></button></div></div>`
+    <button class="messenger-main__notification"></button><button class="messenger-main__other"></button></div></div>`
 
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">`+message+`</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
