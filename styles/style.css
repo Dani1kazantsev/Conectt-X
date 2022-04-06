@@ -77,3 +77,21 @@ body {
     color: #95ffe5;
     background: #272727;
 }
+
+
+.messenger-main__push-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.messenger-main__emoji {
+    border: 0;
+    outline: 0;
+    width: 24px;
+    cursor: pointer;
+    padding: 0;
+    height: 24px;
+    background: url(../img/manifest/messenger/emoji.svg) no-repeat center;
+    background-size: contain;
+}
