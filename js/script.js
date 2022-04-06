@@ -181,7 +181,7 @@ function printChat(userID){
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">`+message+`</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <textarea class="messenger-main__message-text" placeholder="Message"></textarea><button type="button" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
+    <textarea class="messenger-main__message-text" placeholder="Message"></textarea><button type="reset" class="messenger-main__push"onclick='sendMessage(`+obj.id+`)'>
     </button></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html
     document.querySelector('.messenger-main__message-text').onkeydown = (e) =>{
