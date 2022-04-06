@@ -1,11 +1,11 @@
 //<span class="messenger-user__username">Username</span>
 //<span id="name-text" class="messenger-user__username-text">@user</span>
-sendRequest(requestURLusers).then(prototypeFunctions()).then(data =>{
+sendRequest(requestURLusers).then(prototypeFunctions()).then(data => {
     for (let i = 0; i < data.length; i++) {
         allUsers.push(data[i])
     }
     for (let i = 0; i < data.length; i++) {
-        if(data[i].Login == JSON.parse(localStorage.meUser).Login){
+        if (data[i].Login == JSON.parse(localStorage.meUser).Login) {
             var me = data[i];
             UserId = JSON.parse(localStorage.meUser).id
             localStorage.meUser = JSON.stringify(data[i])
@@ -14,7 +14,7 @@ sendRequest(requestURLusers).then(prototypeFunctions()).then(data =>{
     printAccountInfo(me);
     printFriend(me);
     printChat(me.Friends[0]);
-    printMessages(me,me.Friends[0])
+    printMessages(me, me.Friends[0])
     infoCheck();
 })
 
@@ -37,6 +37,7 @@ class Result {
         this.Input = input;
         this.Target = target;
     }
+
     #FindSumbolsCount(str) {
         let result = [[], []];
         for (let i = 0; i < str.length; i++) {
@@ -146,7 +147,7 @@ class Result {
 
     ToString() {
         return this.#IndexOfSimilarity > 0
-            ? this.Target 
+            ? this.Target
             : "";
     }
 }
@@ -156,25 +157,32 @@ let h1 = document.querySelector('.messenger-nav-2__user1');
 let h2 = document.querySelector('.messenger-nav-2__user2');
 let h3 = document.querySelector('.messenger-nav-2__user3');
 let textarea = document.querySelector('.messenger-nav-2__search-input');
+let searchBlock = document.querySelector('.messenger-nav-2__search-rez')
 document.querySelector('.messenger-nav-2__search-input').onkeyup = changed;
 h1.onclick = clicked;
 h2.onclick = clicked;
 h3.onclick = clicked;
 
+
 function changed() {
     results = [];
     words = textarea.value.split(" ");
-    sendRequest(requestURLusers).then(data=>{
+    sendRequest(requestURLusers).then(data => {
         data.forEach((f) => {
             results.push(
                 new Result(words[words.length - 1].toLowerCase(), f.Login)
             );
         });
-    
+
         results = results.sort((a, b) => {
             return a.IndexOfSimilarity > b.IndexOfSimilarity ? -1 : 1;
         });
-    
+        if (textarea.value === '') {
+            searchBlock.style.display = 'none'
+        } else {
+            searchBlock.style.display = 'flex'
+        }
+
         h1.innerHTML = results[0].ToString();
         h2.innerHTML = results[1].ToString();
         h3.innerHTML = results[2].ToString();

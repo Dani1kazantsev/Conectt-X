@@ -95,3 +95,26 @@ body {
     background: url(../img/manifest/messenger/emoji.svg) no-repeat center;
     background-size: contain;
 }
+
+.messenger-nav-2__search-rez {
+    display: none;
+    min-height: 50px;
+    overflow-y: scroll;
+    max-height: 100px;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-top: none;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 3%;
+}
+
+.messenger-nav-2__search-rez::-webkit-scrollbar {
+    width: 5px;
+    background: 0 0
+}
+
+.messenger-nav-2__search-rez::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: #272727;
+    border-radius: 20px
+}
