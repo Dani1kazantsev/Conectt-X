@@ -72,7 +72,11 @@
                 <button form="message" class="messenger-main__voice"></button>
             </div>
             <textarea class="messenger-main__message-text" form="message" placeholder="Message"></textarea>
-            <button type="reset" class="messenger-main__push"></button>
+            <div class="messenger-main__push-block">
+                <button type="button" class="messenger-main__emoji"></button>
+                <button type="reset" class="messenger-main__push" onclick='sendMessage(`+obj.id+`)'>
+                </button>
+            </div>
         </form>
     </div>
 </div>

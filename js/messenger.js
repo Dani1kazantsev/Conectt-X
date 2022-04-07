@@ -158,6 +158,7 @@ let h2 = document.querySelector('.messenger-nav-2__user2');
 let h3 = document.querySelector('.messenger-nav-2__user3');
 let textarea = document.querySelector('.messenger-nav-2__search-input');
 let searchBlock = document.querySelector('.messenger-nav-2__search-rez')
+let searchBtn = document.querySelector('.messenger-nav-2__search-btn')
 document.querySelector('.messenger-nav-2__search-input').onkeyup = changed;
 h1.onclick = clicked;
 h2.onclick = clicked;
@@ -179,9 +180,18 @@ function changed() {
         });
         if (textarea.value === '') {
             searchBlock.style.display = 'none'
+            searchBtn.classList.remove('messenger-nav-2__search-btn--close')
         } else {
             searchBlock.style.display = 'flex'
+            searchBtn.classList.add('messenger-nav-2__search-btn--close')
+            let searchBtnClose = document.querySelector('.messenger-nav-2__search-btn--close')
+            searchBtnClose.addEventListener('click', function () {
+                searchBlock.style.display = 'none'
+                searchBtn.classList.remove('messenger-nav-2__search-btn--close')
+                textarea.value = ''
+            })
         }
+
 
         h1.innerHTML = results[0].ToString();
         h2.innerHTML = results[1].ToString();
@@ -199,3 +209,7 @@ function clicked() {
     input.setSelectionRange(input.value.length, input.value.length);
     changed();
 }
+
+
+
+

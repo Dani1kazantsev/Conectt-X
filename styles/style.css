@@ -88,12 +88,38 @@ body {
 .messenger-main__emoji {
     border: 0;
     outline: 0;
+    position: relative;
     width: 24px;
     cursor: pointer;
     padding: 0;
     height: 24px;
     background: url(../img/manifest/messenger/emoji.svg) no-repeat center;
     background-size: contain;
+}
+
+.messenger-main__emoji--before::before {
+    content: '';
+    position: absolute;
+    top: -310px;
+    overflow-y: scroll;
+    left: -150px;
+    flex-wrap: wrap;
+    width: 200px;
+    height: 300px;
+    padding: 1%;
+    border-radius: 10px;
+    background: #272727;
+}
+
+.messenger-main__emoji--before::before::-webkit-scrollbar {
+    width: 5px;
+    background: #272727;
+}
+
+.messenger-main__emoji--before::before::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: #272727;
+    border-radius: 20px;
 }
 
 .messenger-nav-2__search-rez {
@@ -117,4 +143,14 @@ body {
     width: 5px;
     background: #272727;
     border-radius: 20px
+}
+
+.messenger-nav-2__search-btn--close {
+    border: 0;
+    width: 15px;
+    cursor: pointer;
+    height: 11px;
+    outline: 0;
+    background: url(../img/manifest/messenger/close.svg) no-repeat;
+    background-size: contain
 }
