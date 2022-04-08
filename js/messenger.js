@@ -2,9 +2,10 @@
 //<span id="name-text" class="messenger-user__username-text">@user</span>
 sendRequest(requestURLusers).then(prototypeFunctions()).then(data => {
     for (let i = 0; i < data.length; i++) {
-        if(data[i].id == JSON.parse(localStorage.me).id){}
-        for (let j = 0;j < data[i].Friends.length; j++){
-            allUsers.push(data[i].Friends[j])
+        if (data[i].id == JSON.parse(localStorage.me).id) {
+            for (let j = 0; j < data[i].Friends.length; j++) {
+                allUsers.push(data[i].Friends[j])
+            }
         }
     }
     for (let i = 0; i < data.length; i++) {
