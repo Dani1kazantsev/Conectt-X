@@ -216,7 +216,7 @@ function printMessages(obj, fromObj) {
     if (typeof fromObj == 'number') {
         for (let i = 0; i < allUsers.length; i++) {
             if (allUsers[i].id == fromObj) {
-                fromObj = allUsers[i];
+                fromObj = allUsers[useri];
             }
         }
     }
@@ -239,9 +239,9 @@ function sendMessage(touserid) {
         data.forEach(user =>{
             if (user.id == touserid){
                 for (let f = 0; f < allUsers.length; f++){
-                    if(data[i].id == allUsers[i]){
-                        for (let j = 0; j < data[i].Messages.length; j++){
-                            MessagesAll.push(data[i].Messages[j])
+                    if(user.id == allUsers[i]){
+                        for (let j = 0; j < user.Messages.length; j++){
+                            MessagesAll.push(user.Messages[j])
                         }
                     }
                 }
@@ -304,7 +304,7 @@ if (document.querySelector('.register-main__btn')) {
             allUsers.push(obj);
             infoCheck(obj);
             sendRequestPost("POST", requestURLusers, new User(loginValue, passwordValue, emailValue)).then(() => {
-                location.href = '../messenger.html';
+                location.href = './messenger.html';
             })
         })
     })
