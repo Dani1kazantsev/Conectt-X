@@ -24,7 +24,7 @@ class Messages {
     Message = ""
     Data = ""
 
-    constructor(fromuserid, touserid, message,data) {
+    constructor(fromuserid, touserid, message, data) {
         this.FromUserId = fromuserid;
         this.ToUserId = touserid;
         this.Message = message;
@@ -32,10 +32,7 @@ class Messages {
     }
 }
 
-function sendRequest(url, method) {
-    const headers = {
-        'Content-Type': 'application/json'
-    }
+function sendRequest(url) {
     return fetch(url).then(response => {
         return response.json();
     })
@@ -59,28 +56,28 @@ function addFriend(id) {
     let friendFriends;
     sendRequest(requestURLusers).then(data => {
         for (let i = 0; i < data.length; i++) {
-            if (data[i].id == myid) {
+            if (data[i].id === myid) {
                 myFriends = data[i].Friends;
             }
-            if (data[i].id == id) {
+            if (data[i].id === id) {
                 friendFriends = data[i].Friends;
             }
         }
-    }).then(e => {
+    }).then(() => {
         for (let i = 0; i < myFriends.length; i++) {
-            if (myFriends.id == id) {
+            if (myFriends.id === id) {
                 return;
             }
         }
         for (let i = 0; i < allUsers.length; i++) {
-            if (allUsers[i].id == id) {
+            if (allUsers[i].id === id) {
                 myFriends.push(allUsers[i].id)
             }
-            if (allUsers[i].id == myid) {
+            if (allUsers[i].id === myid) {
                 friendFriends.push(allUsers[i].id)
             }
         }
-    }).then(e => {
+    }).then(() => {
         fetch(requestURLusers + "/" + myid, {
             method: "PATCH",
             body: JSON.stringify({
@@ -108,14 +105,16 @@ function infoCheck() {
         sendRequest(requestURLusers).then(data => {
             let fromUser;
             data.forEach(user => {
+
                 if (user.id == localStorage.toUser) {
                     fromUser = user;
                 }
             });
             for (let i = 0; i < data.length; i++) {
-                if (meObj.id == data[i].id) {
+                if (meObj.id === data[i].id) {
                     if (meObj.Messages.length < data[i].Messages.length) {
                         let allMessages = data[i].Messages;
+                        debugger
                         meObj.Messages = allMessages;
                         for (let j = 0; j < data[i].Messages.length; j++) {
                             if ((data[i].Messages[j].FromUserId == localStorage.toUser) && (data[i].Messages[j].ToUserId == meObj.id) || (data[i].Messages[j].FromUserId == meObj.id) && (data[i].Messages[j].ToUserId == localStorage.toUser)) {
@@ -135,11 +134,14 @@ function prototypeFunctions() {
     Object.prototype.printMessagesClass = function (fromObj) {
         let html = "";
         for (let i = 0; i < this.Messages.length; i++) {
-            if (this.Messages[i].FromUserId == fromObj.id) {
-                html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>"+this.Messages.Data+"</span></div>";
+            if (this.Messages[i].FromUserId === fromObj.id){
+                html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>"
+                    + data.getHours() +":"+data.getMinutes() +"</span></div>";
             }
-            if (this.Messages[i].ToUserId == fromObj.id) {
-                html += "<div class='message-to'><p>" + this.Messages[i].Message + "</p><span class='message__time--to'>12:30</span></div>";
+            if (this.Messages[i].ToUserId === fromObj.id){
+                let data = new Date(Date.parse(this.Messages[i].Data));
+                html += "<div class='message-to'><p>" + this.Messages[i].Message + "</p><span class='message__time--to'>"
+                    + data.getHours() +":" + data.getMinutes() +"</span></div>";
             }
         }
         return html;
@@ -159,7 +161,7 @@ function printFriend(obj) {
     let html = ""
     for (let i = 0; i < obj.Friends.length; i++) {
         for (let j = 0; j < allUsers.length; j++) {
-            if (allUsers[j].id == obj.Friends[i]) {
+            if (allUsers[j].id === obj.Friends[i]) {
                 html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" onclick="printChat(' + allUsers[j].id + ')"><a href="#">'
                 html += '<img src="./img/manifest/messenger/user.png" alt="user">' + allUsers[j].Login + '</a</li></ul>'
                 break
@@ -172,15 +174,16 @@ function printFriend(obj) {
 
 function printChat(userID) {
     localStorage.toUser = userID;
+    let obj;
     let myObject = JSON.parse(localStorage.meUser)
-    if (myObject.Friends.length == 0) {
+    if (myObject.Friends.length === 0) {
         return
     }
     for (let i = 0; i < myObject.Friends.length; i++) {
-        if (myObject.Friends[i] == userID) {
+        if (myObject.Friends[i] === userID) {
             for (let j = 0; j < allUsers.length; j++) {
-                if (allUsers[j].id == userID) {
-                    var obj = allUsers[j];
+                if (allUsers[j].id === userID) {
+                    obj = allUsers[j];
                 }
             }
         }
@@ -196,11 +199,11 @@ function printChat(userID) {
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <textarea class="messenger-main__message-text" placeholder="Message"></textarea><div class="messenger-main__push-block"><div class="messenger-main__emoji-block"><ol class="messenger-main__emoji-list ulres  messenger-main__emoji-list--close"></ol><button type="button" class="messenger-main__emoji"></button></div></button> <button type="reset" class="messenger-main__push"onclick='sendMessage(` + obj.id + `)'>
+    <textarea class="messenger-main__message-text" placeholder="Message"></textarea><div class="messenger-main__push-block"><div class="messenger-main__emoji-block"><ol class="messenger-main__emoji-list ulres  messenger-main__emoji-list--close"></ol><button type="button" class="messenger-main__emoji"></button></div></button> <button type="reset" class="messenger-main__push" onclick='sendMessage(` + obj.id + `)'>
     </button></div></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html
     document.querySelector('.messenger-main__message-text').onkeydown = (e) => {
-        if (e.key == 'Enter') {
+        if (e.key === 'Enter') {
             sendMessage(userID);
             document.querySelector('.messenger-main__message-text').value = "";
             return false;
@@ -210,12 +213,12 @@ function printChat(userID) {
 }
 
 function printMessages(obj, fromObj) {
-    if (obj.Friends.length == 0) {
+    if (obj.Friends.length === 0) {
         return
     }
     if (typeof fromObj == 'number') {
         for (let i = 0; i < allUsers.length; i++) {
-            if (allUsers[i].id == fromObj) {
+            if (allUsers[i].id === fromObj) {
                 fromObj = allUsers[i];
             }
         }
@@ -227,26 +230,27 @@ function printMessages(obj, fromObj) {
 function sendMessage(touserid) {
     let me = JSON.parse(localStorage.meUser).id
     let msg = document.querySelector('.messenger-main__message-text').value;
-    if (msg == "") {
+    let Data = new Date();
+    if (msg === "") {
         return
     }
-    msg = new Messages(me, touserid, msg)
+    msg = new Messages(me, touserid, msg,Data)
     let MessagesAll = [];
     MessagesAll.push(msg);
     let MyMessagesAll = [];
     MyMessagesAll.push(msg);
     sendRequest(requestURLusers).then(data => {
-        data.forEach(user =>{
-            if (user.id == touserid){
-                for (let i = 0; i < allUsers.length; i++){
-                    if(user.id == allUsers[i]){
-                        for (let j = 0; j < user.Messages.length; j++){
+        data.forEach(user => {
+            if (user.id === touserid) {
+                for (let i = 0; i < allUsers.length; i++) {
+                    if (user.id === allUsers[i]) {
+                        for (let j = 0; j < user.Messages.length; j++) {
                             MessagesAll.push(user.Messages[j])
                         }
                     }
                 }
             }
-            if (user.id == me) {
+            if (user.id === me) {
                 for (let j = 0; j < user.Messages.length; j++) {
                     MyMessagesAll.push(user.Messages[j])
                 }
@@ -254,15 +258,15 @@ function sendMessage(touserid) {
         })
 
         for (let i = 0; i < allUsers.length; i++) {
-            if (allUsers[i].id == touserid) {
+            if (allUsers[i].id === touserid) {
                 allUsers[i].Messages = MessagesAll;
             }
-            if (allUsers[i].id == me) {
+            if (allUsers[i].id === me) {
                 allUsers[i].Messages = MyMessagesAll;
                 localStorage.meUser = JSON.stringify(allUsers[i])
             }
         }
-    }).then(e => {
+    }).then(() => {
         fetch(requestURLusers + "/" + touserid, {
             method: "PATCH",
             body: JSON.stringify({
@@ -283,9 +287,10 @@ function sendMessage(touserid) {
         })
     })
 }
+
 //register.js
 if (document.querySelector('.register-main__btn')) {
-    document.querySelector('.register-main__btn').addEventListener('click', e => {
+    document.querySelector('.register-main__btn').addEventListener('click', () => {
         let loginValue = document.getElementById('name').value;
         let passwordValue = document.getElementById('password').value;
         let emailValue = document.getElementById('email').value;
@@ -295,7 +300,7 @@ if (document.querySelector('.register-main__btn')) {
         }
         sendRequest(requestURLusers).then(Users => {
             for (let i = 0; i < Users.length; i++) {
-                if ((Users[i].Login == loginValue) || (Users[i].Email == emailValue)) {
+                if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
                     alert("Такой логин или почта уже есть");
                     return;
                 }
@@ -318,7 +323,7 @@ if (document.querySelector('.login-main__form')) {
         let passwordValue = document.forms[0].elements.password.value;
         sendRequest(requestURLusers).then(Users => {
             for (let i = 0; i < Users.length; i++) {
-                if ((Users[i].Password == passwordValue) && (Users[i].Email == emailValue)) {
+                if ((Users[i].Password === passwordValue) && (Users[i].Email === emailValue)) {
                     UserId = Users[i].id
                     localStorage.clear()
                     localStorage.setItem('meUser', JSON.stringify(Users[i]));
