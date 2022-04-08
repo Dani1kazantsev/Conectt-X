@@ -1,13 +1,18 @@
-//<span class="messenger-user__username">Username</span>
-//<span id="name-text" class="messenger-user__username-text">@user</span>
-sendRequest(requestURLusers).then(prototypeFunctions()).then(data => {
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].id == JSON.parse(localStorage.me).id) {
-            for (let j = 0; j < data[i].Friends.length; j++) {
-                allUsers.push(data[i].Friends[j])
+prototypeFunctions()
+sendRequest(requestURLusers).then(data => {
+    data.forEach(user=>{
+        if (user.id == JSON.parse(localStorage.meUser).id) {
+            for (let i = 0; i < user.Friends.length; i++) {
+                for (let j = 0; j < data.length; j++){
+                    if(data[j].id === user.Friends[i]){
+                        allUsers.push(data[j])
+                    }
+                }
             }
         }
-    }
+    })
+
+    allUsers.push(JSON.parse(localStorage.meUser))
     for (let i = 0; i < data.length; i++) {
         if (data[i].Login == JSON.parse(localStorage.meUser).Login) {
             var me = data[i];

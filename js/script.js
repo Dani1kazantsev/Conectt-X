@@ -216,7 +216,7 @@ function printMessages(obj, fromObj) {
     if (typeof fromObj == 'number') {
         for (let i = 0; i < allUsers.length; i++) {
             if (allUsers[i].id == fromObj) {
-                fromObj = allUsers[useri];
+                fromObj = allUsers[i];
             }
         }
     }
@@ -238,7 +238,7 @@ function sendMessage(touserid) {
     sendRequest(requestURLusers).then(data => {
         data.forEach(user =>{
             if (user.id == touserid){
-                for (let f = 0; f < allUsers.length; f++){
+                for (let i = 0; i < allUsers.length; i++){
                     if(user.id == allUsers[i]){
                         for (let j = 0; j < user.Messages.length; j++){
                             MessagesAll.push(user.Messages[j])
@@ -246,9 +246,9 @@ function sendMessage(touserid) {
                     }
                 }
             }
-            if (data[i].id == me) {
-                for (let j = 0; j < data[i].Messages.length; j++) {
-                    MyMessagesAll.push(data[i].Messages[j])
+            if (user.id == me) {
+                for (let j = 0; j < user.Messages.length; j++) {
+                    MyMessagesAll.push(user.Messages[j])
                 }
             }
         })
