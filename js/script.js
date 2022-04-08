@@ -21,12 +21,14 @@ class User {
 class Messages {
     FromUserId = 0;
     ToUserId = 0;
-    Message = "";
+    Message = ""
+    Data = ""
 
-    constructor(fromuserid, touserid, message) {
+    constructor(fromuserid, touserid, message,data) {
         this.FromUserId = fromuserid;
         this.ToUserId = touserid;
         this.Message = message;
+        this.Data = data;
     }
 }
 
@@ -134,7 +136,7 @@ function prototypeFunctions() {
         let html = "";
         for (let i = 0; i < this.Messages.length; i++) {
             if (this.Messages[i].FromUserId == fromObj.id) {
-                html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>12:30</span></div>";
+                html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>"+this.Messages.Data+"</span></div>";
             }
             if (this.Messages[i].ToUserId == fromObj.id) {
                 html += "<div class='message-to'><p>" + this.Messages[i].Message + "</p><span class='message__time--to'>12:30</span></div>";
@@ -234,11 +236,14 @@ function sendMessage(touserid) {
     let MyMessagesAll = [];
     MyMessagesAll.push(msg);
     sendRequest(requestURLusers).then(data => {
-        allUsers = data;
-        for (let i = 0; i < data.length; i++) {
-            if (data[i].id == touserid) {
-                for (let j = 0; j < data[i].Messages.length; j++) {
-                    MessagesAll.push(data[i].Messages[j])
+        data.forEach(user =>{
+            if (user.id == touserid){
+                for (let f = 0; f < allUsers.length; f++){
+                    if(data[i].id == allUsers[i]){
+                        for (let j = 0; j < data[i].Messages.length; j++){
+                            MessagesAll.push(data[i].Messages[j])
+                        }
+                    }
                 }
             }
             if (data[i].id == me) {
@@ -246,7 +251,8 @@ function sendMessage(touserid) {
                     MyMessagesAll.push(data[i].Messages[j])
                 }
             }
-        }
+        })
+
         for (let i = 0; i < allUsers.length; i++) {
             if (allUsers[i].id == touserid) {
                 allUsers[i].Messages = MessagesAll;
@@ -277,7 +283,6 @@ function sendMessage(touserid) {
         })
     })
 }
-
 //register.js
 if (document.querySelector('.register-main__btn')) {
     document.querySelector('.register-main__btn').addEventListener('click', e => {
@@ -296,7 +301,6 @@ if (document.querySelector('.register-main__btn')) {
                 }
             }
             let obj = new User(loginValue, passwordValue, emailValue);
-            printUser(obj);
             allUsers.push(obj);
             infoCheck(obj);
             sendRequestPost("POST", requestURLusers, new User(loginValue, passwordValue, emailValue)).then(() => {
