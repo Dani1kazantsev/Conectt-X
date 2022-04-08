@@ -73,7 +73,10 @@
             </div>
             <textarea class="messenger-main__message-text" form="message" placeholder="Message"></textarea>
             <div class="messenger-main__push-block">
-                <button type="button" class="messenger-main__emoji"></button>
+                <div class="messenger-main__emoji-block">
+                    <ol class="messenger-main__emoji-list ulres messenger-main__emoji-list--close"></ol>
+                    <button type="button" class="messenger-main__emoji"></button>
+                </div>
                 <button type="reset" class="messenger-main__push" onclick='sendMessage(`+obj.id+`)'>
                 </button>
             </div>
