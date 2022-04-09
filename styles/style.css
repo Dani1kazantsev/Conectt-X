@@ -177,3 +177,19 @@ body {
     background: url(../img/manifest/messenger/close.svg) no-repeat;
     background-size: contain
 }
+.messenger-nav-2__friendAdd-btn{
+    border:0;
+    width:20px;
+    cursor:pointer;
+    height:15px;
+    outline:0;
+    background:url(../img/manifest/messenger/add-user.png) no-repeat;
+    background-size:contain;
+    margin-left: 10px;
+}
+.web__eye{
+    width: 50px;
+}
+.web__container{
+
+}

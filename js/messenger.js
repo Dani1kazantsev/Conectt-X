@@ -5,14 +5,14 @@ sendRequest(requestURLusers).then(data => {
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){
                     if(data[j].id === user.Friends[i]){
-                        allUsers.push(data[j])
+                        allMyFriends.push(data[j])
                     }
                 }
             }
         }
     })
 
-    allUsers.push(JSON.parse(localStorage.meUser))
+    allMyFriends.push(JSON.parse(localStorage.meUser))
     for (let i = 0; i < data.length; i++) {
         if (data[i].Login == JSON.parse(localStorage.meUser).Login) {
             var me = data[i];
@@ -21,12 +21,22 @@ sendRequest(requestURLusers).then(data => {
         }
     }
     printAccountInfo(me);
-    printFriend(me);
+    printFriend();
     printChat(me.Friends[0]);
     printMessages(me, me.Friends[0])
     infoCheck();
 })
-
+document.querySelector('.messenger-nav-2__friendAdd-btn').addEventListener('click',e=>{
+    let userName = document.querySelector('.messenger-nav-2__search-input').value;
+    sendRequest(requestURLusers).then(data=>{
+        for (let i = 0; i < data.length; i++) {
+            if(data[i].Login == userName){
+                addFriend(data[i].id);
+                break;
+            }
+        }
+    })
+})
 var results = [];
 
 class Result {
@@ -62,14 +72,11 @@ class Result {
         return result;
     }
 
-    #GetSimilarityCount() {
+    #GetSimilarityCount(max) {
         let index = 0;
         for (
-            let i = 0;
-            i < this.Target.length || i < this.Input.length;
-            i++
-        ) {
-            if (this.Target[i] == this.Input[i]) {
+            let i = 0;i < max; i++) {
+            if (this.Target[i] == this.Input[i]){
                 index++;
             }
         }
@@ -101,11 +108,12 @@ class Result {
     }
 
     #GetIndexOfSimilarity() {
+
         let max =
             this.Target.length >= this.Input.length
                 ? this.Target.length
                 : this.Input.length;
-        let cur = this.#GetSimilarityCount();
+        let cur = this.#GetSimilarityCount(max);
         let count = cur / max;
 
         let isSub = this.#IsSubString() ? 1 : 0;
