@@ -1,4 +1,26 @@
 prototypeFunctions()
+let Emoji
+sendRequest('https://conectt.herokuapp.com/images').then(data=>{
+    Emoji = data;
+});
+function F(){
+    let html = ``;
+    debugger
+    for (let i = 100; i < 169; i++){
+        if(i != 168){
+            html += `{
+    "name": "smile1",
+    "src": "http://conectt-project.herokuapp.com/Emojis/Emoji%20Smiley-`+i+`.png"
+      },`
+        }else {
+            html += `{
+    "name": "smile1",
+    "src": "http://conectt-project.herokuapp.com/Emojis/Emoji%20Smiley-`+i+`.png"
+      }`
+        }
+    }
+    return html;
+}
 sendRequest(requestURLusers).then(data => {
     data.forEach(user=>{
         if (user.id == JSON.parse(localStorage.meUser).id) {

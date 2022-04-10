@@ -192,17 +192,37 @@ function printChat(userID) {
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <textarea class="messenger-main__message-text" placeholder="Message"></textarea><div class="messenger-main__push-block"><div class="messenger-main__emoji-block"><ol class="messenger-main__emoji-list ulres  messenger-main__emoji-list--close"></ol><button type="button" class="messenger-main__emoji"></button></div></button> <button type="reset" class="messenger-main__push" onclick='sendMessage(` + obj.id + `)'>
+    <div class="messenger-main__message-text" data-text="Message" contenteditable="true"></div><div class="messenger-main__push-block"><div class="messenger-main__emoji-block"><ol class="messenger-main__emoji-list ulres "></ol><button type="button" class="messenger-main__emoji"></button></div></button> <button type="reset" class="messenger-main__push" onclick='sendMessage(` + obj.id + `)'>
     </button></div></form></div></div>`
-    document.querySelector('.messenger-main').innerHTML = html
+    document.querySelector('.messenger-main').innerHTML = html;
     document.querySelector('.messenger-main__message-text').onkeydown = (e) => {
         if (e.key === 'Enter') {
             sendMessage(userID);
-            document.querySelector('.messenger-main__message-text').value = "";
             return false;
         }
     }
 
+
+
+    document.querySelector('.messenger-main__emoji').addEventListener('click',e=>{
+            let html = ``;
+            for (let i = 0; i < Emoji.length;i++){
+                html += `<img onclick="EmojiPrint('`+Emoji[i].src+`')" class="messenger-main__emoji-img" src="`+Emoji[i].src+`">`
+            }
+            document.querySelector('.messenger-main__emoji-list').innerHTML = html;
+            if(document.querySelector('.messenger-main__emoji-list').style.display == 'block'){
+                document.querySelector('.messenger-main__emoji-list').style.display = 'none';
+                document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(0)';
+            }
+            else{
+                document.querySelector('.messenger-main__emoji-list').style.display = 'block';
+                document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(1)';
+            }
+
+    })
+}
+function EmojiPrint(src){
+    document.querySelector('.messenger-main__message-text').insertAdjacentHTML("beforeend", "<img src='"+src+"' class=\"messenger-main__emoji-image\">")
 }
 function printMessages(obj, fromObj) {
     if (obj.Friends.length === 0) {
@@ -220,7 +240,8 @@ function printMessages(obj, fromObj) {
 }
 function sendMessage(touserid) {
     let me = JSON.parse(localStorage.meUser).id
-    let msg = document.querySelector('.messenger-main__message-text').value;
+    let msg = document.querySelector('.messenger-main__message-text').innerHTML;
+    document.querySelector('.messenger-main__message-text').innerHTML = "";
     let Data = new Date();
     if (msg === "") {
         return;
@@ -233,12 +254,8 @@ function sendMessage(touserid) {
     sendRequest(requestURLusers).then(data => {
         data.forEach(user => {
             if (user.id === touserid) {
-                for (let i = 0; i < UsersMy.length; i++) {
-                    if (user.id === UsersMy[i]) {
-                        for (let j = 0; j < user.Messages.length; j++) {
-                            MessagesAll.push(user.Messages[j]);
-                        }
-                    }
+                for (let j = 0; j < user.Messages.length; j++) {
+                    MessagesAll.push(user.Messages[j]);
                 }
             }
             if (user.id === me) {

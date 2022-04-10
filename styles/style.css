@@ -124,13 +124,16 @@ body {
     flex-wrap: wrap;
     width: 200px;
     height: 300px;
+    transform: scale(0);
+    transition: 500ms;
     padding: 1%;
     border-radius: 10px;
     background: #272727;
+    display: none;
 }
 
 .messenger-main__emoji-list--close {
-    display: none;
+
 }
 
 .messenger-main__emoji-list::-webkit-scrollbar {
@@ -143,8 +146,17 @@ body {
     background: #272727;
     border-radius: 20px
 }
-
-
+[contentEditable=true]:empty:not(:focus):before{
+    color: black;
+    content:attr(data-text);
+}
+.messenger-main__emoji-img{
+    cursor: pointer;
+    width: 45px;
+}
+.messenger-main__emoji-image{
+    width: 25px;
+}
 .messenger-nav-2__search-rez {
     display: none;
     min-height: 50px;
