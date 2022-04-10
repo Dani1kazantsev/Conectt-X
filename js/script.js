@@ -129,6 +129,7 @@ function prototypeFunctions() {
         let html = "";
         for (let i = 0; i < this.Messages.length; i++) {
             if (this.Messages[i].FromUserId === fromObj.id){
+                let data = new Date(Date.parse(this.Messages[i].Data));
                 html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>"
                     + data.getHours() +":"+data.getMinutes() +"</span></div>";
             }
@@ -205,7 +206,7 @@ function printChat(userID) {
 }
 function printMessages(obj, fromObj) {
     if (obj.Friends.length === 0) {
-        return
+        return;
     }
     if (typeof fromObj == 'number') {
         for (let i = 0; i < UsersMy.length; i++) {
@@ -222,7 +223,7 @@ function sendMessage(touserid) {
     let msg = document.querySelector('.messenger-main__message-text').value;
     let Data = new Date();
     if (msg === "") {
-        return
+        return;
     }
     msg = new Messages(me, touserid, msg,Data)
     let MessagesAll = [];
@@ -235,14 +236,14 @@ function sendMessage(touserid) {
                 for (let i = 0; i < UsersMy.length; i++) {
                     if (user.id === UsersMy[i]) {
                         for (let j = 0; j < user.Messages.length; j++) {
-                            MessagesAll.push(user.Messages[j])
+                            MessagesAll.push(user.Messages[j]);
                         }
                     }
                 }
             }
             if (user.id === me) {
                 for (let j = 0; j < user.Messages.length; j++) {
-                    MyMessagesAll.push(user.Messages[j])
+                    MyMessagesAll.push(user.Messages[j]);
                 }
             }
         })
@@ -283,15 +284,15 @@ function sendMessage(touserid) {
 //login.js
 if (document.querySelector('#login-main__form')) {
     document.querySelector('#login-main__form').addEventListener('submit', function (e) {
-        e.preventDefault()
+        e.preventDefault();
         let emailValue = document.forms[0].elements.email.value;
         let passwordValue = document.forms[0].elements.password.value;
         sendRequest(requestURLusers).then(Users => {
             for (let i = 0; i < Users.length; i++) {
                 if ((Users[i].Password === passwordValue) && (Users[i].Email === emailValue)) {
-                    localStorage.clear()
+                    localStorage.clear();
                     localStorage.setItem('meUser', JSON.stringify(Users[i]));
-                    infoCheck()
+                    infoCheck();
                     location.href = './messenger.html';
                     return;
                 }
