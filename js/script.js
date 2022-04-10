@@ -1,7 +1,7 @@
 const requestURLusers = "https://conectt.herokuapp.com/users";
 const requestURLMessages = "https://conectt.herokuapp.com/messages";
 let UserId = -1;
-let allMyFriends = [];
+let UsersMy = [];
 localStorage.setItem('toUser', -1)
     class User {
         Login = "";
@@ -50,33 +50,31 @@ function sendRequestPost(method, url, body = null) {
 }
 
 function addFriend(id) {
-    let myid = JSON.parse(localStorage.meUser).id;
     let newMe = JSON.parse(localStorage.meUser);
-    newMe.Friends.push(id);
-    localStorage.meUser = JSON.stringify(newMe)
     let myFriends;
     let friendFriends;
     sendRequest(requestURLusers).then(data => {
         for (let i = 0; i < data.length; i++) {
-            if (data[i].id === myid) {
+            if (data[i].id == newMe.id) {
                 myFriends = data[i].Friends;
             }
-            if (data[i].id === id) {
+            if (data[i].id == id) {
                 friendFriends = data[i].Friends;
-                allMyFriends.push(data[i])
+                UsersMy.push(data[i])
             }
-
         }
         for (let i = 0; i < myFriends.length; i++) {
-            if (myFriends.id === id) {
+            if (myFriends[i] == id){
+                alert('Есть уже этот друг')
                 return;
             }
         }
+        newMe.Friends.push(id);
+        localStorage.meUser = JSON.stringify(newMe)
         myFriends.push(id)
-        friendFriends.push(myid)
+        friendFriends.push(newMe.id)
         printFriend();
-    }).then(() => {
-        fetch(requestURLusers + "/" + myid, {
+        fetch(requestURLusers + "/" + newMe.id, {
             method: "PATCH",
             body: JSON.stringify({
                 Friends: myFriends
@@ -95,8 +93,8 @@ function addFriend(id) {
             }
         })
     })
-}
 
+}
 function infoCheck() {
     let meObj = JSON.parse(localStorage.meUser)
     setInterval(function () {
@@ -156,10 +154,10 @@ function printFriend() {
     let html = "<h2 class=\"messenger-nav-2__title\">friends</h2>";
     let obj = JSON.parse(localStorage.meUser);
     for (let i = 0; i < obj.Friends.length; i++) {
-        for (let j = 0; j < allMyFriends.length; j++) {
-            if (allMyFriends[j].id === obj.Friends[i]) {
-                html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" onclick="printChat(' + allMyFriends[j].id + ')"><a href="#">'
-                html += '<img src="./img/manifest/messenger/user.png" alt="user">' + allMyFriends[j].Login + '</a</li></ul>'
+        for (let j = 0; j < UsersMy.length; j++) {
+            if (UsersMy[j].id === obj.Friends[i]) {
+                html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" onclick="printChat(' + UsersMy[j].id + ')"><a href="#">'
+                html += '<img src="./img/manifest/messenger/user.png" alt="user">' + UsersMy[j].Login + '</a</li></ul>'
                 break
             }
         }
@@ -175,9 +173,9 @@ function printChat(userID) {
     }
     for (let i = 0; i < myObject.Friends.length; i++) {
         if (myObject.Friends[i] === userID) {
-            for (let j = 0; j < allMyFriends.length; j++) {
-                if (allMyFriends[j].id === userID) {
-                    obj = allMyFriends[j];
+            for (let j = 0; j < UsersMy.length; j++) {
+                if (UsersMy[j].id === userID) {
+                    obj = UsersMy[j];
                 }
             }
         }
@@ -210,9 +208,9 @@ function printMessages(obj, fromObj) {
         return
     }
     if (typeof fromObj == 'number') {
-        for (let i = 0; i < allMyFriends.length; i++) {
-            if (allMyFriends[i].id === fromObj) {
-                fromObj = allMyFriends[i];
+        for (let i = 0; i < UsersMy.length; i++) {
+            if (UsersMy[i].id === fromObj) {
+                fromObj = UsersMy[i];
             }
         }
     }
@@ -234,8 +232,8 @@ function sendMessage(touserid) {
     sendRequest(requestURLusers).then(data => {
         data.forEach(user => {
             if (user.id === touserid) {
-                for (let i = 0; i < allMyFriends.length; i++) {
-                    if (user.id === allMyFriends[i]) {
+                for (let i = 0; i < UsersMy.length; i++) {
+                    if (user.id === UsersMy[i]) {
                         for (let j = 0; j < user.Messages.length; j++) {
                             MessagesAll.push(user.Messages[j])
                         }
@@ -249,13 +247,13 @@ function sendMessage(touserid) {
             }
         })
 
-        for (let i = 0; i < allMyFriends.length; i++) {
-            if (allMyFriends[i].id === touserid) {
-                allMyFriends[i].Messages = MessagesAll;
+        for (let i = 0; i < UsersMy.length; i++) {
+            if (UsersMy[i].id === touserid) {
+                UsersMy[i].Messages = MessagesAll;
             }
-            if (allMyFriends[i].id === me) {
-                allMyFriends[i].Messages = MyMessagesAll;
-                localStorage.meUser = JSON.stringify(allMyFriends[i])
+            if (UsersMy[i].id === me) {
+                UsersMy[i].Messages = MyMessagesAll;
+                localStorage.meUser = JSON.stringify(UsersMy[i])
             }
         }
     }).then(() => {
@@ -293,7 +291,8 @@ if (document.querySelector('#login-main__form')) {
                 if ((Users[i].Password === passwordValue) && (Users[i].Email === emailValue)) {
                     localStorage.clear()
                     localStorage.setItem('meUser', JSON.stringify(Users[i]));
-                    location.href = './messenger.html'
+                    infoCheck()
+                    location.href = './messenger.html';
                     return;
                 }
             }

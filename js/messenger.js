@@ -5,14 +5,14 @@ sendRequest(requestURLusers).then(data => {
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){
                     if(data[j].id === user.Friends[i]){
-                        allMyFriends.push(data[j])
+                        UsersMy.push(data[j])
                     }
                 }
             }
         }
     })
 
-    allMyFriends.push(JSON.parse(localStorage.meUser))
+    UsersMy.push(JSON.parse(localStorage.meUser))
     for (let i = 0; i < data.length; i++) {
         if (data[i].Login == JSON.parse(localStorage.meUser).Login) {
             var me = data[i];
@@ -31,6 +31,10 @@ document.querySelector('.messenger-nav-2__friendAdd-btn').addEventListener('clic
     sendRequest(requestURLusers).then(data=>{
         for (let i = 0; i < data.length; i++) {
             if(data[i].Login == userName){
+                if(data[i].id == JSON.parse(localStorage.meUser).id){
+                    alert("Ты дурак?Это ты сам.");
+                    return;
+                }
                 addFriend(data[i].id);
                 break;
             }
@@ -76,7 +80,7 @@ class Result {
         let index = 0;
         for (
             let i = 0;i < max; i++) {
-            if (this.Target[i] == this.Input[i]){
+            if (this.Target.Login[i] == this.Input[i]){
                 index++;
             }
         }
@@ -86,12 +90,12 @@ class Result {
 
     #IsSubString() {
         let str =
-            this.Target.length >= this.Input.length
-                ? this.Target
+            this.Target.Login.length >= this.Input.length
+                ? this.Target.Login
                 : this.Input;
         let substr =
-            this.Target.length < this.Input.length
-                ? this.Target
+            this.Target.Login.length < this.Input.length
+                ? this.Target.Login
                 : this.Input;
 
         for (let i = 0, k = 0; i < str.length; i++) {
@@ -110,8 +114,8 @@ class Result {
     #GetIndexOfSimilarity() {
 
         let max =
-            this.Target.length >= this.Input.length
-                ? this.Target.length
+            this.Target.Login.length >= this.Input.length
+                ? this.Target.Login.length
                 : this.Input.length;
         let cur = this.#GetSimilarityCount(max);
         let count = cur / max;
@@ -119,7 +123,7 @@ class Result {
         let isSub = this.#IsSubString() ? 1 : 0;
 
         let inputcount = this.#FindSumbolsCount(this.Input);
-        let targetcount = this.#FindSumbolsCount(this.Target);
+        let targetcount = this.#FindSumbolsCount(this.Target.Login);
 
         let prev = targetcount[0].length;
 
@@ -164,7 +168,7 @@ class Result {
 
     ToString() {
         return this.#IndexOfSimilarity > 0
-            ? this.Target
+            ? `<span class="cursor" onclick="addFriend(`+this.Target.id+`)">`+this.Target.Login+`</span>`
             : "";
     }
 }
@@ -183,13 +187,16 @@ h3.onclick = clicked;
 
 
 function changed() {
-    results = [];
-    words = textarea.value.split(" ");
     sendRequest(requestURLusers).then(data => {
+        results = [];
+        words = textarea.value.split(" ");
         data.forEach((f) => {
-            results.push(
-                new Result(words[words.length - 1].toLowerCase(), f.Login)
-            );
+            if(f.id != JSON.parse(localStorage.meUser).id){
+                results.push(
+                    new Result(words[words.length - 1].toLowerCase(), f)
+                );
+            }
+
         });
 
         results = results.sort((a, b) => {
@@ -208,20 +215,16 @@ function changed() {
                 textarea.value = ''
             })
         }
-
-
         h1.innerHTML = results[0].ToString();
         h2.innerHTML = results[1].ToString();
-        h3.innerHTML = results[2].ToString();
+
     })
 }
-
 function clicked() {
-    word = this.innerHTML.split("<br>")[0];
+    let word = this.innerHTML.split("<br>")[0];
     words[words.length - 1] = word;
     input.value = "";
     words.forEach((f) => (input.value += f + " "));
-
     input.focus();
     input.setSelectionRange(input.value.length, input.value.length);
     changed();

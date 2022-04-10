@@ -18,7 +18,7 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
                 }
             }
             let obj = new User(loginValue, passwordValue, emailValue);
-            allMyFriends.push(obj);
+            UsersMy.push(obj);
             infoCheck(obj);
             localStorage.clear()
             localStorage.setItem('meUser', JSON.stringify(obj))
@@ -48,7 +48,7 @@ document.querySelector('.register__form').addEventListener('submit', (e) => {
                 }
             }
             let obj = new User(loginValue, passwordValue, emailValue);
-            allMyFriends.push(obj);
+            UsersMy.push(obj);
             infoCheck(obj);
             localStorage.clear();
             localStorage.setItem('meUser', JSON.stringify(obj));
