@@ -214,3 +214,12 @@ body {
     color: #95ffe5;
 }
 
+.message-to p {
+    display: flex;
+    align-items: center;
+}
+
+.message-from p {
+    display: flex;
+    align-items: center;
+}

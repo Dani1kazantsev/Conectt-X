@@ -57,6 +57,7 @@ function addFriend(id) {
         for (let i = 0; i < data.length; i++) {
             if (data[i].id == newMe.id) {
                 myFriends = data[i].Friends;
+                UsersMy.push(data[i])
             }
             if (data[i].id == id) {
                 friendFriends = data[i].Friends;
