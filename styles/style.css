@@ -120,21 +120,20 @@ body {
     position: absolute;
     top: -310px;
     overflow-y: scroll;
-    left: -150px;
+    left: -190px;
     flex-wrap: wrap;
-    width: 200px;
+    width: 250px;
     height: 300px;
     transform: scale(0);
-    transition: 500ms;
-    padding: 1%;
+    transition: 0.5s;
+    padding: 10px;
+    justify-content: space-between;
+    gap: 10px;
     border-radius: 10px;
     background: #272727;
     display: none;
 }
 
-.messenger-main__emoji-list--close {
-
-}
 
 .messenger-main__emoji-list::-webkit-scrollbar {
     width: 5px;
@@ -147,15 +146,22 @@ body {
     border-radius: 20px
 }
 [contentEditable=true]:empty:not(:focus):before{
-    color: black;
+    color: rgba(255, 255, 255, 0.20);
     content:attr(data-text);
 }
 .messenger-main__emoji-img{
     cursor: pointer;
-    width: 45px;
+    width: 35px;
+    padding: 5px;
+}
+
+.messenger-main__emoji-img:hover {
+    background: #5f6164;
+    border-radius: 5px;
 }
 .messenger-main__emoji-image{
-    width: 25px;
+    width: 20px;
+    align-self: center;
 }
 .messenger-nav-2__search-rez {
     display: none;
@@ -202,5 +208,9 @@ body {
 
 .cursor{
     cursor: pointer;
+}
+
+.cursor:hover {
+    color: #95ffe5;
 }
 

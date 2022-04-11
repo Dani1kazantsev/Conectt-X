@@ -184,7 +184,7 @@ function printChat(userID) {
     }
     let message = printMessages(myObject, obj)
     let html = `<div class="messenger-main__header"><div class="messenger-main__chat-preview"><span class="messenger-main__name">` + obj.Login + `</span>
-    <button class="messenger-main__favorite"></button></div>
+    <button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
     <div class="messenger-main__settings"><div class="messenger-nav-2__search">
     <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
     <button class="messenger-main__notification"></button><button class="messenger-main__other"></button></div></div>`
@@ -210,12 +210,12 @@ function printChat(userID) {
                 html += `<img onclick="EmojiPrint('`+Emoji[i].src+`')" class="messenger-main__emoji-img" src="`+Emoji[i].src+`">`
             }
             document.querySelector('.messenger-main__emoji-list').innerHTML = html;
-            if(document.querySelector('.messenger-main__emoji-list').style.display == 'block'){
+            if(document.querySelector('.messenger-main__emoji-list').style.display == 'flex'){
                 document.querySelector('.messenger-main__emoji-list').style.display = 'none';
                 document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(0)';
             }
             else{
-                document.querySelector('.messenger-main__emoji-list').style.display = 'block';
+                document.querySelector('.messenger-main__emoji-list').style.display = 'flex';
                 document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(1)';
             }
 

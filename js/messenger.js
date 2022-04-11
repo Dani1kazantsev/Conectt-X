@@ -48,21 +48,7 @@ sendRequest(requestURLusers).then(data => {
     printMessages(me, me.Friends[0])
     infoCheck();
 })
-document.querySelector('.messenger-nav-2__friendAdd-btn').addEventListener('click',e=>{
-    let userName = document.querySelector('.messenger-nav-2__search-input').value;
-    sendRequest(requestURLusers).then(data=>{
-        for (let i = 0; i < data.length; i++) {
-            if(data[i].Login == userName){
-                if(data[i].id == JSON.parse(localStorage.meUser).id){
-                    alert("Ты дурак?Это ты сам.");
-                    return;
-                }
-                addFriend(data[i].id);
-                break;
-            }
-        }
-    })
-})
+
 var results = [];
 
 class Result {
