@@ -750,6 +750,8 @@ h3 {
     -moz-user-select: text;
     -ms-user-select: text;
     user-select: text;
+    word-wrap: break-word;
+    display: flex;
     resize: none;
     overflow-y: scroll;
     color: #fff;
@@ -759,6 +761,11 @@ h3 {
     font: inherit;
     background: 0 0;
 }
+
+.messenger-main__message-text span {
+    width: 100%;
+}
+
 
 .messenger-main__message-text:active, .messenger-main__message-text:focus {
     border: 0;
