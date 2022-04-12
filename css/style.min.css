@@ -756,7 +756,8 @@ h3 {
     max-height: 100px;
     border: 0;
     inline-size: 65vw;
-    word-break: break-all;
+    word-break: break-word;
+    word-wrap: anywhere;
     font: inherit;
     background: 0 0;
     display: table-cell;
@@ -982,9 +983,9 @@ h3 {
 
 .messenger-user {
     background: rgba(37, 39, 42, .8);
+    flex-grow: 1;
     height: 100vh;
 }
-
 .messenger-user__info {
     display: flex;
     padding: 5%;

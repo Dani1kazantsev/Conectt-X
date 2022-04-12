@@ -1,5 +1,6 @@
 const requestURLusers = "https://conectt.herokuapp.com/users";
 const requestURLMessages = "https://conectt.herokuapp.com/messages";
+let booleanInfo = true;
 let UserId = -1;
 let UsersMy = [];
 localStorage.setItem('toUser', -1)
@@ -62,7 +63,6 @@ function addFriend(id) {
         for (let i = 0; i < data.length; i++) {
             if (data[i].id == newMe.id) {
                 myFriends = data[i].Friends;
-                UsersMy.push(data[i])
             }
             if (data[i].id == id) {
                 friendFriends = data[i].Friends;
@@ -99,7 +99,71 @@ function addFriend(id) {
             }
         })
     })
-
+}
+function deleteFriend(id) {
+    let newMe = JSON.parse(localStorage.meUser);
+    if(confirm('Вы уверены что хотите удалить этого друга?') == false){
+        return;
+    }
+    let boalenCheck = true;
+    let myFriends;
+    let friendFriends;
+    for (let i = 0; i < UsersMy.length; i++) {
+        if(UsersMy[i].id == newMe.id){
+            for (let j = 0; j < UsersMy[i].Friends.length; j++) {
+                if (UsersMy[i].Friends[j] == id){
+                    boalenCheck = false;
+                }
+            }
+        }
+    }
+    if(boalenCheck){
+        alert('Нет такого друга.')
+        return;
+    }
+    sendRequest(requestURLusers).then(data => {
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].id == newMe.id) {
+                myFriends = data[i].Friends;
+            }
+            if (data[i].id == id) {
+                friendFriends = data[i].Friends;
+            }
+        }
+        let deleteIndex = myFriends.indexOf(id)
+        if(deleteIndex !== -1){
+            myFriends.splice(deleteIndex,1);
+            friendFriends.splice(deleteIndex,1)
+        }
+        newMe.Friends = myFriends;
+        localStorage.meUser = JSON.stringify(newMe)
+        printFriend();
+        debugger
+        if (newMe.Friends.length >= 1){
+            printChat(newMe.Friends[0])
+        }
+        if(newMe.Friends.length == 0){
+            printChat(-1)
+        }
+        fetch(requestURLusers + "/" + newMe.id, {
+            method: "PATCH",
+            body: JSON.stringify({
+                Friends: myFriends
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
+        fetch(requestURLusers + "/" + id, {
+            method: "PATCH",
+            body: JSON.stringify({
+                Friends: friendFriends
+            }),
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            }
+        })
+    })
 }
 function infoCheck() {
     let meObj = JSON.parse(localStorage.meUser)
@@ -107,7 +171,6 @@ function infoCheck() {
         sendRequest(requestURLusers).then(data => {
             let fromUser;
             data.forEach(user => {
-
                 if (user.id == localStorage.toUser) {
                     fromUser = user;
                 }
@@ -137,7 +200,7 @@ function prototypeFunctions() {
             if (this.Messages[i].FromUserId === fromObj.id){
                 let data = new Date(Date.parse(this.Messages[i].Data));
                 let minutes;
-                if(data.getMinutes() < 10){
+                if(data.getMinutes() < 10&&data.getMinutes() > 0){
                     minutes = "0" + data.getMinutes()
                 }
                 else{
@@ -163,12 +226,28 @@ function prototypeFunctions() {
 
     }
 }
-function printAccountInfo(obj) {
-    html = "<span class='messenger-user__username'>" + obj.Login + "</span>"
-    html += "<span id='name-text' class='messenger-user__username-text'>@" + obj.Login + "</span>"
-    document.querySelector('.messenger-user__username-block').insertAdjacentHTML("afterbegin", html)
-    document.querySelector('.messenger-user__person').insertAdjacentHTML("afterbegin", ('<h2 id="name" class="messenger-user__name">' + obj.Login + '</h2>'))
-    document.querySelector('.messenger-user__username-block-email').insertAdjacentHTML("beforeend", ('<span id="email" class="messenger-user__username-text">' + obj.Email + '</span>'))
+function printAccountInfo(obj){
+    if (booleanInfo){
+        let me = JSON.parse(localStorage.meUser);
+        html = "<span class='messenger-user__username'>" + me.Login + "</span>"
+        html += "<span id='name-text' class='messenger-user__username-text'>@" + me.Login + "</span>"
+        document.querySelector('.messenger-user__username-block').innerHTML = html;
+        document.querySelector('.messenger-user__person').innerHTML =
+            '<h2 id="name" class="messenger-user__name">' +me.Login +'</h2><span class="messenger-user__status">Status</span>'
+        document.querySelector('.messenger-user__username-block-email').innerHTML =
+            '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>'
+        booleanInfo = !booleanInfo;
+    }
+    else if(booleanInfo == false){
+        html = "<span class='messenger-user__username'>" + obj.Login + "</span>"
+        html += "<span id='name-text' class='messenger-user__username-text'>@" + obj.Login + "</span>"
+        document.querySelector('.messenger-user__username-block').innerHTML = html;
+        document.querySelector('.messenger-user__person').innerHTML =
+            '<h2 id="name" class="messenger-user__name">' +obj.Login +'</h2><span class="messenger-user__status">Status</span>'
+        document.querySelector('.messenger-user__username-block-email').innerHTML =
+            '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + obj.Email + '</span>';
+        booleanInfo = !booleanInfo;
+    }
 }
 
 function printFriend() {
@@ -189,9 +268,6 @@ function printChat(userID) {
     localStorage.toUser = userID;
     let obj;
     let myObject = JSON.parse(localStorage.meUser)
-    if (myObject.Friends.length === 0) {
-        return
-    }
     for (let i = 0; i < myObject.Friends.length; i++) {
         if (myObject.Friends[i] === userID) {
             for (let j = 0; j < UsersMy.length; j++) {
@@ -202,9 +278,17 @@ function printChat(userID) {
         }
 
     }
-    let message = printMessages(myObject, obj)
-    let html = `<div class="messenger-main__header"><div class="messenger-main__chat-preview"><span class="messenger-main__name">` + obj.Login + `</span>
-    <button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
+    let html = ``;
+    let message;
+    if(UserId == -1 || myObject.Friends.length == 0){
+        html  += `<div class="messenger-main__header"><div class="messenger-main__chat-preview"><span class="messenger-main__name">None</span>`
+        message = 'Заведи сначала друзей)'
+    }
+    else{
+        message = printMessages(myObject, obj)
+        html  += `<div class="messenger-main__header"><div class="messenger-main__chat-preview"><span class="messenger-main__name">`+obj.Login+`</span>`
+    }
+    html += `<button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
     <div class="messenger-main__settings"><div class="messenger-nav-2__search">
     <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
     <button class="messenger-main__notification"></button><button class="messenger-main__other"></button></div></div>`
@@ -212,13 +296,24 @@ function printChat(userID) {
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
     <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
-    <div class="messenger-main__message-text" data-text="Message" contenteditable="true"></div><div class="messenger-main__push-block"><div class="messenger-main__emoji-block"><ol class="messenger-main__emoji-list ulres "></ol><button type="button" class="messenger-main__emoji"></button></div></button> <button type="reset" class="messenger-main__push" onclick='sendMessage(` + obj.id + `)'>
+    <div class="messenger-main__message-text" data-text="Message" contenteditable="true"></div><div class="messenger-main__push-block"><div class="messenger-main__emoji-block">
+    <ol class="messenger-main__emoji-list ulres "></ol><button type="button" class="messenger-main__emoji"></button></div></button> 
+    <button type="reset" class="messenger-main__push">
     </button></div></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html;
+    document.querySelector('.messenger-main__delete').addEventListener('click',()=>{
+        deleteFriend(obj.id)
+    })
+    document.querySelector('.messenger-main__other').addEventListener('click',()=>{
+        printAccountInfo(obj)
+    })
+    document.querySelector('.messenger-main__push').addEventListener('click',()=>{
+        sendMessage(obj.id)
+    })
     document.querySelector('.messenger-main__message-text').onkeydown = (e) => {
         if(e.keyCode === 13 && e.shiftKey){
             if(document.querySelector('.messenger-main__message-text').innerHTML !== ""){
-                document.querySelector('.messenger-main__message-text').insertAdjacentHTML('beforeend','/n')
+                document.querySelector('.messenger-main__message-text').insertAdjacentHTML('beforeend','<br>')
             }
         }
         else if (e.key === 'Enter'){
@@ -226,6 +321,32 @@ function printChat(userID) {
             return false;
         }
     }
+    document.querySelector('.messenger-main__message-text').addEventListener("paste", function(e) {
+        e.preventDefault();
+        if(e.clipboardData.types[0] == 'text/plain'||e.clipboardData.types[0] == 'text/html'){
+            let text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            document.execCommand("insertHTML", false, text);
+        }
+        else if(e.clipboardData.types[0] == 'Files'){
+            // let item = e.clipboardData.items[0];
+            // if (item.type.indexOf("image") == 0){
+            //     let blob = item.getAsFile();
+            //     document.querySelector('.messenger-main__message-text').insertAdjacentHTML('beforeend','<img>')
+            //     let reader = new FileReader();
+            //     reader.onload = function(event) {
+            //         let child =  document.querySelector('.messenger-main__message-text').childNodes
+            //         for (let i = 0; i < child.length; i++) {
+            //             if(child[i].localName == 'img'){
+            //                 child[i].src = event.target.result;
+            //             }
+            //         }
+            //
+            //     }
+            //     reader.readAsDataURL(blob);
+            //
+            // }
+        }
+    });
     document.querySelector('.messenger-main__emoji').addEventListener('click',e=>{
             let html = ``;
             for (let i = 0; i < Emoji.length;i++){

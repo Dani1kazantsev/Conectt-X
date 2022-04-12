@@ -11,7 +11,7 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
     if(endReg){
         endReg = false;
         sendRequest(requestURLusers).then(Users => {
-            for(let i = 0;i< Users.length;i++){
+            for(let i = 0; i< Users.length; i++){
                 if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
                     alert("Такой логин или почта уже есть");
                     return;
