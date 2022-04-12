@@ -684,7 +684,16 @@ h3 {
 }
 
 .messenger-main__notification {
-    background: url(../img/manifest/messenger/notification.svg) no-repeat center
+    background: url(../img/manifest/messenger/notification.svg) no-repeat center;
+    background-size: contain !important;
+}
+
+.messenger-main__notification--active {
+    background-image: url(../img/manifest/messenger/notification.svg),
+    url("../img/manifest/icons/ellipse.svg");
+    background-size: contain, 5px !important;
+    background-repeat: no-repeat;
+    background-position: center, top right;
 }
 
 .messenger-main__other {
@@ -951,30 +960,34 @@ h3 {
 
 .messenger-nav-2__channel a {
     display: block;
-    color: #b5b5b5
+    color: #b5b5b5;
+    width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .messenger-nav-2__channel:hover, .messenger-nav-2__friend:hover {
-    background: rgba(255, 255, 255, .2)
+    background: rgba(255, 255, 255, .2);
 }
 
 .messenger-nav-2__friends-list {
-    margin-top: 10px
+    margin-top: 10px;
 }
 
 .messenger-nav-2__friend a {
     display: flex;
     align-items: center;
-    gap: 5px
+    gap: 5px;
 }
+
 
 .messenger-nav-2__friend a img {
     width: 34px;
-    border-radius: 5px
+    border-radius: 5px;
 }
 
 .messenger-nav-2__friend {
-    padding: 5px
+    padding: 5px;
 }
 
 .messenger-nav-2__friend:hover {
@@ -986,6 +999,7 @@ h3 {
     flex-grow: 1;
     height: 100vh;
 }
+
 .messenger-user__info {
     display: flex;
     padding: 5%;
@@ -994,7 +1008,10 @@ h3 {
 }
 
 .messenger-user__name {
-    font-size: 1.2em
+    font-size: 1.2em;
+    max-width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .messenger-user__status {
@@ -1044,6 +1061,13 @@ h3 {
     color: #5f6164
 }
 
+.messenger-user__username-text {
+    max-width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+
 .web__container {
     display: flex;
     flex-direction: column;
@@ -1073,4 +1097,53 @@ h3 {
     height: 16px;
     background: url(../img/manifest/icons/delete.svg) no-repeat;
     background-size: contain
+}
+
+
+.messenger-user__person--edit {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.messenger-user__edit {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: url("../img/manifest/icons/edit.svg") no-repeat center;
+    background-size: contain;
+    padding: 5px;
+}
+
+.status-block {
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 5px;
+    max-width: 175px;
+    max-height: 100px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    word-break: break-word;
+    word-wrap: anywhere;
+    background: inherit;
+    border: .5px solid rgba(255, 255, 255, 24%);
+}
+
+.status-block::-webkit-scrollbar {
+    width: 5px;
+    background: 0 0;
+}
+
+.status-block::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: #272727;
+    border-radius: 20px;
+}
+
+.status-block:active,
+.status-block:focus {
+    border: .5px solid rgba(255, 255, 255, 24%);
+    outline: none;
 }

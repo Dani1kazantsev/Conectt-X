@@ -220,4 +220,58 @@ body {
     color: #95ffe5;
 }
 
+.messenger-nav-2__friend--user {
+    font-size: 16px;
+    font-weight: normal;
+    width: 85%;
+    text-overflow: ellipsis ;
+    overflow: hidden;
+}
 
+.message-number {
+    font-size: 12px;
+    color: #000;
+    padding: 0 8px;
+    border-radius: 5px;
+    background: #95ffe5;
+}
+
+.messenger-main__notification--block {
+    display: flex;
+    position: relative;
+}
+
+.messenger-main__notification-list {
+    position: absolute;
+    top: 20px;
+    overflow-y: scroll;
+    left: -230px;
+    flex-wrap: wrap;
+    width: 250px;
+    height: 100px;
+    transition: 0.5s;
+    padding: 10px;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 10px;
+    background: rgba(39, 39, 39, 0.90);
+}
+
+.messenger-main__notification-list li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+    padding-bottom: 5px;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.messenger-main__notification-list::-webkit-scrollbar {
+    width: 5px;
+    background: 0 0
+}
+
+.messenger-main__notification-list::-webkit-scrollbar-thumb {
+    width: 5px;
+    background: #272727;
+    border-radius: 20px
+}

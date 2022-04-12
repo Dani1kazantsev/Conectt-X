@@ -37,10 +37,10 @@
     <div class="messenger-nav-2__channels">
         <h2 class="messenger-nav-2__title">Channels</h2>
         <ul class="messenger-nav-2__channels-list ulres">
-            <li class="messenger-nav-2__channel"><a href="#"># channel</a></li>
-            <li class="messenger-nav-2__channel"><a href="#"># channel</a></li>
-            <li class="messenger-nav-2__channel"><a href="#"># channel</a></li>
-            <li class="messenger-nav-2__channel"><a href="#"># channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
         </ul>
     </div>
     <div class="messenger-nav-2__friends">
@@ -59,7 +59,7 @@
                 <button class="messenger-nav-2__search-btn"></button>
             </div>
             <div class="messenger-nav-2__user1"></div>
-            <button class="messenger-main__notification"></button>
+            <button class="messenger-main__notification messenger-main__notification--active"></button>
             <button class="messenger-main__other"></button>
         </div>
     </div>
@@ -88,7 +88,11 @@
     <img src="img/manifest/messenger/user.png" alt="user" class="messenger-user__photo">
     <div class="messenger-user__info">
         <div class="messenger-user__person">
-            <span class="messenger-user__status">Status</span>
+            <div class="messenger-user__person--edit">
+                <span class="messenger-user__status">Status</span>
+                <button type="button" class="messenger-user__edit"></button>
+            </div>
+            <div class="status-block" contenteditable="true"></div>
         </div>
         <ul class="messenger-user__networks ulres">
             <li class="messenger-user__link"><a href="#"></a></li>
