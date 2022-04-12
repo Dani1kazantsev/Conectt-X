@@ -10,32 +10,46 @@ localStorage.setItem('toUser', -1)
         Password = "";
         Messages = [];
         Friends = [];
+        Avatar = "";
+        Status = "";
+        Socials = [];
 
-        constructor(login, password, email) {
+        constructor(login, password, email,Avatar = "img/manifest/messenger/user.png",
+                    Status = "",
+                    Socials = []) {
             this.Login = login;
             this.Password = password;
             this.Email = email;
+            this.Avatar = Avatar;
+            this.Status = Status;
+            this.Socials = Socials;
         }
     }
-
     class Messages {
+        static  id;
         FromUserId = 0;
         ToUserId = 0;
-        Message = ""
-        Data = ""
-
+        Message = "";
+        Data = "";
+        Id = 0;
         constructor(fromuserid, touserid, message, data) {
             this.FromUserId = fromuserid;
             this.ToUserId = touserid;
             this.Message = message;
             this.Data = data;
+            this.Id = Messages.id++
+        }
+    }
+    class Social {
+        Name = "";
+        Source = "";
+        constructor(name,src) {
+            this.Name = name;
+            this.Source = src;
         }
     }
 /*
-1)Добавление переноса сообщений и исправление бага.
-2)Всплывающий блок с инфой со всеми.
 3)Уведомление.
-4)Добавить кнопку удаления и функцию удаления.
  */
 function sendRequest(url) {
     return fetch(url).then(response => {
@@ -60,6 +74,7 @@ function addFriend(id) {
     let myFriends;
     let friendFriends;
     sendRequest(requestURLusers).then(data => {
+        debugger
         for (let i = 0; i < data.length; i++) {
             if (data[i].id == newMe.id) {
                 myFriends = data[i].Friends;
@@ -138,7 +153,6 @@ function deleteFriend(id) {
         newMe.Friends = myFriends;
         localStorage.meUser = JSON.stringify(newMe)
         printFriend();
-        debugger
         if (newMe.Friends.length >= 1){
             printChat(newMe.Friends[0])
         }
@@ -178,8 +192,7 @@ function infoCheck() {
             for (let i = 0; i < data.length; i++) {
                 if (meObj.id === data[i].id) {
                     if (meObj.Messages.length < data[i].Messages.length) {
-                        let allMessages = data[i].Messages;
-                        meObj.Messages = allMessages;
+                        meObj.Messages = data[i].Messages;
                         for (let j = 0; j < data[i].Messages.length; j++) {
                             if ((data[i].Messages[j].FromUserId == localStorage.toUser) && (data[i].Messages[j].ToUserId == meObj.id) || (data[i].Messages[j].FromUserId == meObj.id) && (data[i].Messages[j].ToUserId == localStorage.toUser)) {
                                 let html = printMessages(meObj, fromUser);
@@ -229,6 +242,7 @@ function prototypeFunctions() {
 function printAccountInfo(obj){
     if (booleanInfo){
         let me = JSON.parse(localStorage.meUser);
+        document.querySelector('.messenger-user__photo').src = me.Avatar
         html = "<span class='messenger-user__username'>" + me.Login + "</span>"
         html += "<span id='name-text' class='messenger-user__username-text'>@" + me.Login + "</span>"
         document.querySelector('.messenger-user__username-block').innerHTML = html;
@@ -239,6 +253,7 @@ function printAccountInfo(obj){
         booleanInfo = !booleanInfo;
     }
     else if(booleanInfo == false){
+        document.querySelector('.messenger-user__photo').src = obj.Avatar
         html = "<span class='messenger-user__username'>" + obj.Login + "</span>"
         html += "<span id='name-text' class='messenger-user__username-text'>@" + obj.Login + "</span>"
         document.querySelector('.messenger-user__username-block').innerHTML = html;

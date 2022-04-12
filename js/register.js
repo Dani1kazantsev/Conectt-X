@@ -9,7 +9,6 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
         return;
     }
     if(endReg){
-        endReg = false;
         sendRequest(requestURLusers).then(Users => {
             for(let i = 0; i< Users.length; i++){
                 if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
@@ -17,15 +16,15 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
                     return;
                 }
             }
+            endReg = false;
             let obj = new User(loginValue, passwordValue, emailValue);
-            UsersMy.push(obj);
-            infoCheck(obj);
-            localStorage.clear()
-            localStorage.setItem('meUser', JSON.stringify(obj))
-            sendRequestPost("POST", requestURLusers, new User(loginValue, passwordValue, emailValue)).then(() => {
+            localStorage.clear();
+            localStorage.setItem('meUser', JSON.stringify(obj));
+            sendRequestPost("POST", requestURLusers, new User(loginValue, passwordValue, emailValue)).then(()=>{
                 endReg = true;
                 location.href = './messenger.html';
             })
+
         })
     }
 
@@ -47,13 +46,15 @@ document.querySelector('.register__form').addEventListener('submit', (e) => {
                     return;
                 }
             }
+            endReg = false;
             let obj = new User(loginValue, passwordValue, emailValue);
-            UsersMy.push(obj);
-            infoCheck(obj);
             localStorage.clear();
             localStorage.setItem('meUser', JSON.stringify(obj));
-            sendRequestPost("POST", requestURLusers,obj);
-            location.href = './messenger.html';
+            sendRequestPost("POST", requestURLusers,obj).then(()=>{
+                endReg = true;
+                location.href = './messenger.html';
+            })
+
         })
     }
 
