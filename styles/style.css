@@ -95,7 +95,11 @@ body {
     padding-top: 5px;
     height: fit-content;
 }
-
+.messenger-main__message-text span{
+    color: white !important;
+    background: transparent !important;
+    font-size: inherit !important;
+}
 .message__time--from {
     font-size: 10px;
     align-self: flex-end;
