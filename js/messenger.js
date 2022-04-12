@@ -4,10 +4,9 @@ sendRequest('https://conectt.herokuapp.com/images').then(data=>{
     Emoji = data;
 });
 sendRequest(requestURLusers).then(data => {
+    let me;
     data.forEach(user=>{
-        if (user.id == JSON.parse(localStorage.meUser).id) {
-            localStorage.meUser = JSON.stringify(user)
-            UsersMy.push(JSON.parse(localStorage.meUser))
+        if (user.id == JSON.parse(localStorage.meUser).id){
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){
                     if(data[j].id === user.Friends[i]){
@@ -16,17 +15,22 @@ sendRequest(requestURLusers).then(data => {
                 }
             }
         }
-    })
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].Login == JSON.parse(localStorage.meUser).Login) {
-            var me = data[i];;
+        if (user.Login == JSON.parse(localStorage.meUser).Login) {
+            me = user;
+            localStorage.meUser = JSON.stringify(user);
+            UsersMy.push(JSON.parse(localStorage.meUser))
             UserId = JSON.parse(localStorage.meUser).id;
         }
-    }
+
+    })
     printAccountInfo(me);
     printFriend();
-    printChat(me.Friends[0]);
-    printMessages(me, me.Friends[0])
+    if(me.Friends.length !=0){
+        printChat(me.Friends[0]);
+    }
+    else{
+        printChat(-1);
+    }
     infoCheck();
 })
 
