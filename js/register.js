@@ -1,15 +1,15 @@
 let endReg = true;
 document.querySelector('.register-main__btn').addEventListener('click', (e) => {
     e.preventDefault()
+    let loginValue = document.getElementById('name').value;
+    let passwordValue = document.getElementById('password').value;
+    let emailValue = document.getElementById('email').value;
+    if (passwordValue.length < 8) {
+        alert("слишком короткий пароль");
+        return;
+    }
     if(endReg){
         endReg = false;
-        let loginValue = document.getElementById('name').value;
-        let passwordValue = document.getElementById('password').value;
-        let emailValue = document.getElementById('email').value;
-        if (passwordValue.length < 8) {
-            alert("слишком короткий пароль");
-            return;
-        }
         sendRequest(requestURLusers).then(Users => {
             for(let i = 0;i< Users.length;i++){
                 if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
@@ -31,15 +31,15 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
 
 })
 document.querySelector('.register__form').addEventListener('submit', (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    let loginValue = document.getElementById('name').value;
+    let passwordValue = document.getElementById('password').value;
+    let emailValue = document.getElementById('email').value;
+    if (passwordValue.length < 8) {
+        alert("слишком короткий пароль");
+        return;
+    }
     if(endReg){
-        let loginValue = document.getElementById('name').value;
-        let passwordValue = document.getElementById('password').value;
-        let emailValue = document.getElementById('email').value;
-        if (passwordValue.length < 8) {
-            alert("слишком короткий пароль");
-            return;
-        }
         sendRequest(requestURLusers).then(Users => {
             for (let i = 0; i < Users.length; i++) {
                 if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {

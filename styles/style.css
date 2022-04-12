@@ -69,6 +69,9 @@ body {
     padding: 5px 10px;
     border-radius: 10px;
     background: #95ffe5;
+    align-items: center;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .message-from {
@@ -80,6 +83,9 @@ body {
     background: #272727;
     display: inline-flex;
     gap: 10px;
+    align-items: center;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .message__time--to {
@@ -113,6 +119,8 @@ body {
     height: 24px;
     background: url(../img/manifest/messenger/emoji.svg) no-repeat center;
     background-size: contain;
+    border-style: none;
+
 }
 
 .messenger-main__emoji-block {
@@ -164,8 +172,10 @@ body {
     border-radius: 5px;
 }
 .messenger-main__emoji-image{
-    width: 20px;
+    width: 22px;
     align-self: center;
+    vertical-align: bottom;
+    pointer-events: none;
 }
 .messenger-nav-2__search-rez {
     display: none;
@@ -218,16 +228,4 @@ body {
     color: #95ffe5;
 }
 
-.message-to p {
-    display: inline-flex;
-    align-items: center;
-    overflow-wrap: break-word;
-    word-break: break-all;
-}
 
-.message-from p {
-    display: inline-flex;
-    align-items: center;
-    overflow-wrap: break-word;
-    word-break: break-all;
-}

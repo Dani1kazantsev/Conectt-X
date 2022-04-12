@@ -30,7 +30,12 @@ localStorage.setItem('toUser', -1)
             this.Data = data;
         }
     }
-
+/*
+1)Добавление переноса сообщений и исправление бага.
+2)Всплывающий блок с инфой со всеми.
+3)Уведомление.
+4)Добавить кнопку удаления и функцию удаления.
+ */
 function sendRequest(url) {
     return fetch(url).then(response => {
         return response.json();
@@ -131,13 +136,27 @@ function prototypeFunctions() {
         for (let i = 0; i < this.Messages.length; i++) {
             if (this.Messages[i].FromUserId === fromObj.id){
                 let data = new Date(Date.parse(this.Messages[i].Data));
+                let minutes;
+                if(data.getMinutes() < 10){
+                    minutes = "0" + data.getMinutes()
+                }
+                else{
+                    minutes = data.getMinutes()
+                }
                 html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>"
-                    + data.getHours() +":"+data.getMinutes() +"</span></div>";
+                    + data.getHours() +":"+minutes+"</span></div>";
             }
             if (this.Messages[i].ToUserId === fromObj.id){
                 let data = new Date(Date.parse(this.Messages[i].Data));
+                let minutes;
+                if(data.getMinutes() < 10){
+                    minutes = "0" + data.getMinutes()
+                }
+                else{
+                    minutes = data.getMinutes()
+                }
                 html += "<div class='message-to'><p>" + this.Messages[i].Message + "</p><span class='message__time--to'>"
-                    + data.getHours() +":" + data.getMinutes() +"</span></div>";
+                    + data.getHours() +":" + minutes +"</span></div>";
             }
         }
         return html;
@@ -197,14 +216,16 @@ function printChat(userID) {
     </button></div></form></div></div>`
     document.querySelector('.messenger-main').innerHTML = html;
     document.querySelector('.messenger-main__message-text').onkeydown = (e) => {
-        if (e.key === 'Enter') {
+        if(e.keyCode === 13 && e.shiftKey){
+            if(document.querySelector('.messenger-main__message-text').innerHTML !== ""){
+                document.querySelector('.messenger-main__message-text').insertAdjacentHTML('beforeend','/n')
+            }
+        }
+        else if (e.key === 'Enter'){
             sendMessage(userID);
             return false;
         }
     }
-
-
-
     document.querySelector('.messenger-main__emoji').addEventListener('click',e=>{
             let html = ``;
             for (let i = 0; i < Emoji.length;i++){

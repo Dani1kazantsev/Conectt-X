@@ -750,19 +750,17 @@ h3 {
     -moz-user-select: text;
     -ms-user-select: text;
     user-select: text;
-    word-wrap: break-word;
-    display: flex;
-    resize: none;
     overflow-x: hidden;
     overflow-y: scroll;
     color: #fff;
     max-height: 100px;
     border: 0;
     inline-size: 65vw;
-    overflow-wrap: break-word;
     word-break: break-all;
     font: inherit;
     background: 0 0;
+    display: table-cell;
+    vertical-align: bottom;
 }
 
 
