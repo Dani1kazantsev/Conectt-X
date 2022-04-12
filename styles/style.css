@@ -84,12 +84,16 @@ body {
 
 .message__time--to {
     font-size: 10px;
+    align-self: flex-end;
     color: rgba(0, 0, 0, 0.50);
     padding-top: 5px;
+    height: fit-content;
 }
 
 .message__time--from {
     font-size: 10px;
+    align-self: flex-end;
+    height: fit-content;
     color: rgba(255, 255, 255, 0.30);
     padding-top: 5px;
 }
@@ -215,11 +219,15 @@ body {
 }
 
 .message-to p {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }
 
 .message-from p {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    overflow-wrap: break-word;
+    word-break: break-all;
 }

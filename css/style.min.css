@@ -758,13 +758,11 @@ h3 {
     color: #fff;
     max-height: 100px;
     border: 0;
-    width: 65vw;
+    inline-size: 65vw;
+    overflow-wrap: break-word;
+    word-break: break-all;
     font: inherit;
     background: 0 0;
-}
-
-.messenger-main__message-text span {
-    width: 100%;
 }
 
 
