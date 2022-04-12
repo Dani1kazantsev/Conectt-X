@@ -46,11 +46,6 @@ body {
 .messenger-user__photo {
     width: 100%;
 }
-
-.messenger-user {
-    flex-grow: 1;
-}
-
 .messenger-main__chat-list {
     display: flex;
     gap: 10px;
@@ -66,8 +61,7 @@ body {
     padding: 5px 10px;
     border-radius: 10px;
     background: #95ffe5;
-    overflow-wrap: break-word;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .message-from {
@@ -77,8 +71,7 @@ body {
     border-radius: 10px;
     color: #95ffe5;
     background: #272727;
-    overflow-wrap: break-word;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .message__time--to {
