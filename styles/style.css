@@ -62,14 +62,10 @@ body {
     color: #272727;
     width: fit-content;
     max-width: 40%;
-    display: inline-flex;
-    gap: 10px;
     align-self: flex-end;
-    text-align: right;
     padding: 5px 10px;
     border-radius: 10px;
     background: #95ffe5;
-    align-items: center;
     overflow-wrap: break-word;
     word-break: break-all;
 }
@@ -81,18 +77,16 @@ body {
     border-radius: 10px;
     color: #95ffe5;
     background: #272727;
-    display: inline-flex;
-    gap: 10px;
-    align-items: center;
     overflow-wrap: break-word;
     word-break: break-all;
 }
 
 .message__time--to {
     font-size: 10px;
-    align-self: flex-end;
+    float: right;
+    line-height: initial;
+    width: fit-content;
     color: rgba(0, 0, 0, 0.50);
-    padding-top: 5px;
     height: fit-content;
 }
 .messenger-main__message-text span{
@@ -102,10 +96,11 @@ body {
 }
 .message__time--from {
     font-size: 10px;
-    align-self: flex-end;
+    width: fit-content;
+    float: right;
+    line-height: initial;
     height: fit-content;
     color: rgba(255, 255, 255, 0.30);
-    padding-top: 5px;
 }
 
 .messenger-main__push-block {
