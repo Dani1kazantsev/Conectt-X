@@ -630,7 +630,7 @@ h3 {
 
 .messenger-main {
     background: #2f383b;
-    width: 100%;
+    width: 65%;
     height: 100vh;
     display: flex;
     flex-direction: column
@@ -753,11 +753,12 @@ h3 {
     word-wrap: break-word;
     display: flex;
     resize: none;
+    overflow-x: hidden;
     overflow-y: scroll;
     color: #fff;
     max-height: 100px;
     border: 0;
-    width: 100%;
+    width: 65vw;
     font: inherit;
     background: 0 0;
 }
@@ -986,8 +987,6 @@ h3 {
 .messenger-user {
     background: rgba(37, 39, 42, .8);
     height: 100vh;
-    display: none;
-    transform: translate(-100%);
 }
 
 .messenger-user__info {
