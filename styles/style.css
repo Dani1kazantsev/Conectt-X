@@ -62,7 +62,6 @@ body {
     border-radius: 10px;
     background: #95ffe5;
     word-break: break-word;
-    word-wrap: anywhere;
 }
 
 .message-from {
@@ -73,7 +72,6 @@ body {
     color: #95ffe5;
     background: #272727;
     word-break: break-word;
-    word-wrap: anywhere;
 }
 
 .message__time--to {

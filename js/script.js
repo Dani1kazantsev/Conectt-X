@@ -4,38 +4,52 @@ let booleanInfo = true;
 let UserId = -1;
 let UsersMy = [];
 localStorage.setItem('toUser', -1)
-    class User {
-        Login = "";
-        Email = "";
-        Password = "";
-        Messages = [];
-        Friends = [];
+class User {
+    Login = "";
+    Email = "";
+    Password = "";
+    Messages = [];
+    Friends = [];
+    Avatar = "";
+    Status = "";
+    Socials = [];
 
-        constructor(login, password, email) {
-            this.Login = login;
-            this.Password = password;
-            this.Email = email;
-        }
+    constructor(login, password, email,Avatar = "img/manifest/messenger/user.png",
+                Status = "",
+                Socials = []) {
+        this.Login = login;
+        this.Password = password;
+        this.Email = email;
+        this.Avatar = Avatar;
+        this.Status = Status;
+        this.Socials = Socials;
     }
-
-    class Messages {
-        FromUserId = 0;
-        ToUserId = 0;
-        Message = ""
-        Data = ""
-
-        constructor(fromuserid, touserid, message, data) {
-            this.FromUserId = fromuserid;
-            this.ToUserId = touserid;
-            this.Message = message;
-            this.Data = data;
-        }
+}
+class Messages {
+    static  id;
+    FromUserId = 0;
+    ToUserId = 0;
+    Message = "";
+    Data = "";
+    Id = 0;
+    constructor(fromuserid, touserid, message, data) {
+        this.FromUserId = fromuserid;
+        this.ToUserId = touserid;
+        this.Message = message;
+        this.Data = data;
+        this.Id = Messages.id++
     }
+}
+class Social {
+    Name = "";
+    Source = "";
+    constructor(name,src) {
+        this.Name = name;
+        this.Source = src;
+    }
+}
 /*
-1)Добавление переноса сообщений и исправление бага.
-2)Всплывающий блок с инфой со всеми.
 3)Уведомление.
-4)Добавить кнопку удаления и функцию удаления.
  */
 function sendRequest(url) {
     return fetch(url).then(response => {
@@ -60,6 +74,7 @@ function addFriend(id) {
     let myFriends;
     let friendFriends;
     sendRequest(requestURLusers).then(data => {
+        debugger
         for (let i = 0; i < data.length; i++) {
             if (data[i].id == newMe.id) {
                 myFriends = data[i].Friends;
@@ -105,19 +120,19 @@ function deleteFriend(id) {
     if(confirm('Вы уверены что хотите удалить этого друга?') == false){
         return;
     }
-    let boalenCheck = true;
+    let booleanCheck = true;
     let myFriends;
     let friendFriends;
     for (let i = 0; i < UsersMy.length; i++) {
         if(UsersMy[i].id == newMe.id){
             for (let j = 0; j < UsersMy[i].Friends.length; j++) {
                 if (UsersMy[i].Friends[j] == id){
-                    boalenCheck = false;
+                    booleanCheck = false;
                 }
             }
         }
     }
-    if(boalenCheck){
+    if(booleanCheck){
         alert('Нет такого друга.')
         return;
     }
@@ -138,7 +153,6 @@ function deleteFriend(id) {
         newMe.Friends = myFriends;
         localStorage.meUser = JSON.stringify(newMe)
         printFriend();
-        debugger
         if (newMe.Friends.length >= 1){
             printChat(newMe.Friends[0])
         }
@@ -170,6 +184,7 @@ function infoCheck() {
     setInterval(function () {
         sendRequest(requestURLusers).then(data => {
             let fromUser;
+
             data.forEach(user => {
                 if (user.id == localStorage.toUser) {
                     fromUser = user;
@@ -177,12 +192,32 @@ function infoCheck() {
             });
             for (let i = 0; i < data.length; i++) {
                 if (meObj.id === data[i].id) {
-                    if (meObj.Messages.length < data[i].Messages.length) {
-                        let allMessages = data[i].Messages;
-                        meObj.Messages = allMessages;
+                    if (meObj.Messages.length < data[i].Messages.length){
+                        data[i].Friends.forEach(user=>{
+                            let myMessages = 0;
+                            let newMyMessages = 0;
+                            for (let j = 0; j < data[i].Messages.length; j++) {
+                                if(user == data[i].Messages[j].FromUserId||user == data[i].Messages[j].ToUserId){
+                                    newMyMessages += 1;
+                                }
+                            }
+                            for (let j = 0; j < meObj.Messages.length; j++) {
+                                if(user == meObj.Messages[j].FromUserId||user == meObj.Messages[j].ToUserId){
+                                    myMessages += 1;
+                                }
+                                if (meObj.Messages.length == (j + 1)){
+                                    let count = (newMyMessages - myMessages)
+                                    if(count > 0){
+                                        printNotification(count,user)
+                                    }
+
+                                }
+                            }
+                        })
                         for (let j = 0; j < data[i].Messages.length; j++) {
                             if ((data[i].Messages[j].FromUserId == localStorage.toUser) && (data[i].Messages[j].ToUserId == meObj.id) || (data[i].Messages[j].FromUserId == meObj.id) && (data[i].Messages[j].ToUserId == localStorage.toUser)) {
-                                let html = printMessages(meObj, fromUser);
+
+                                let html = printMessages(data[i], fromUser);
                                 document.querySelector('.messenger-main__chat-list').innerHTML = html
                             }
                         }
@@ -226,19 +261,27 @@ function prototypeFunctions() {
 
     }
 }
+function printNotification(count,user){
+    document.querySelector('.message-number'+user).innerHTML = count;
+}
 function printAccountInfo(obj){
     if (booleanInfo){
         let me = JSON.parse(localStorage.meUser);
+        document.querySelector('.messenger-user__photo').src = me.Avatar
         html = "<span class='messenger-user__username'>" + me.Login + "</span>"
         html += "<span id='name-text' class='messenger-user__username-text'>@" + me.Login + "</span>"
         document.querySelector('.messenger-user__username-block').innerHTML = html;
         document.querySelector('.messenger-user__person').innerHTML =
-            '<h2 id="name" class="messenger-user__name">' +me.Login +'</h2><span class="messenger-user__status">Status</span>'
+            '<h2 id="name" class="messenger-user__name">' +me.Login +'</h2>' +
+            '<div class="messenger-user__person--edit">' + '<span class="messenger-user__status">Status</span>' +
+            '<button type="button" class="messenger-user__edit"></button>' +
+            '</div><div class="status-block" contenteditable="true"></div>'
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>'
         booleanInfo = !booleanInfo;
     }
     else if(booleanInfo == false){
+           document.querySelector('.messenger-user__photo').src = obj.Avatar
         html = "<span class='messenger-user__username'>" + obj.Login + "</span>"
         html += "<span id='name-text' class='messenger-user__username-text'>@" + obj.Login + "</span>"
         document.querySelector('.messenger-user__username-block').innerHTML = html;
@@ -257,8 +300,8 @@ function printFriend() {
         for (let j = 0; j < UsersMy.length; j++) {
             if (UsersMy[j].id === obj.Friends[i]) {
                 html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" onclick="printChat(' + UsersMy[j].id + ')"><a href="#">'
-                html += '<img src="./img/manifest/messenger/user.png" alt="user">' + UsersMy[j].Login + '</a</li></ul>'
-                break
+                html += '<img src="./img/manifest/messenger/user.png" alt="user"><h2 class="messenger-nav-2__friend--user">' + UsersMy[j].Login + '</h2><span class="message-number message-number'+UsersMy[j].id+'"></span></a></li></ul>'
+                break;
             }
         }
     }
@@ -291,7 +334,7 @@ function printChat(userID) {
     html += `<button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
     <div class="messenger-main__settings"><div class="messenger-nav-2__search">
     <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
-    <button class="messenger-main__notification"></button><button class="messenger-main__other"></button></div></div>`
+    <button class="messenger-main__notification messenger-main__notification--active"></button><button class="messenger-main__other"></button></div></div>`
 
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
@@ -348,19 +391,19 @@ function printChat(userID) {
         }
     });
     document.querySelector('.messenger-main__emoji').addEventListener('click',e=>{
-            let html = ``;
-            for (let i = 0; i < Emoji.length;i++){
-                html += `<img onclick="EmojiPrint('`+Emoji[i].src+`')" class="messenger-main__emoji-img" src="`+Emoji[i].src+`">`
-            }
-            document.querySelector('.messenger-main__emoji-list').innerHTML = html;
-            if(document.querySelector('.messenger-main__emoji-list').style.display == 'flex'){
-                document.querySelector('.messenger-main__emoji-list').style.display = 'none';
-                document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(0)';
-            }
-            else{
-                document.querySelector('.messenger-main__emoji-list').style.display = 'flex';
-                document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(1)';
-            }
+        let html = ``;
+        for (let i = 0; i < Emoji.length;i++){
+            html += `<img onclick="EmojiPrint('`+Emoji[i].src+`')" class="messenger-main__emoji-img" src="`+Emoji[i].src+`">`
+        }
+        document.querySelector('.messenger-main__emoji-list').innerHTML = html;
+        if(document.querySelector('.messenger-main__emoji-list').style.display == 'flex'){
+            document.querySelector('.messenger-main__emoji-list').style.display = 'none';
+            document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(0)';
+        }
+        else{
+            document.querySelector('.messenger-main__emoji-list').style.display = 'flex';
+            document.querySelector('.messenger-main__emoji-list').style.transform = 'scale(1)';
+        }
 
     })
 }
