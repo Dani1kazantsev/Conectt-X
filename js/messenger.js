@@ -9,7 +9,7 @@ sendRequest(requestURLusers).then(data => {
         if (user.id == JSON.parse(localStorage.meUser).id){
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){
-                    if(data[j].id === user.Friends[i]){
+                    if(data[j].id === user.Friends[i].Id){
                         UsersMy.push(data[j])
                     }
                 }
@@ -17,7 +17,10 @@ sendRequest(requestURLusers).then(data => {
         }
         if (user.Login == JSON.parse(localStorage.meUser).Login) {
             me = user;
-            localStorage.meUser = JSON.stringify(user);
+            if(JSON.parse(localStorage.meUser.id == undefined)){
+                localStorage.meUser = JSON.stringify(user);
+            }
+
             UsersMy.push(JSON.parse(localStorage.meUser))
             UserId = JSON.parse(localStorage.meUser).id;
         }
@@ -26,7 +29,7 @@ sendRequest(requestURLusers).then(data => {
     printAccountInfo(me);
     printFriend();
     if(me.Friends.length !=0){
-        printChat(me.Friends[0]);
+        printChat(me.Friends[0].Id);
     }
     else{
         printChat(-1);
@@ -185,6 +188,7 @@ function changed() {
         words = textarea.value.split(" ");
         data.forEach((f) => {
             if(f.id != JSON.parse(localStorage.meUser).id){
+                debugger
                 results.push(
                     new Result(words[words.length - 1].toLowerCase(), f)
                 );

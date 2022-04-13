@@ -1,7 +1,6 @@
 const requestURLusers = "https://conectt.herokuapp.com/users";
 const requestURLMessages = "https://conectt.herokuapp.com/messages";
 let booleanInfo = true;
-let UserId = -1;
 let UsersMy = [];
 localStorage.setItem('toUser', -1)
 class User {
@@ -23,6 +22,14 @@ class User {
         this.Avatar = Avatar;
         this.Status = Status;
         this.Socials = Socials;
+    }
+}
+class Friend{
+    Id = 0;
+    Notification = 0;
+    constructor(id,notification = '') {
+        this.Id = id;
+        this.Notification = notification;
     }
 }
 class Messages {
@@ -48,6 +55,7 @@ class Social {
         this.Source = src;
     }
 }
+
 /*
 3)Уведомление.
  */
@@ -68,13 +76,13 @@ function sendRequestPost(method, url, body = null) {
         credentials: 'include'
     })
 }
-
 function addFriend(id) {
     let newMe = JSON.parse(localStorage.meUser);
     let myFriends;
     let friendFriends;
+    let Friend = new Friend(id)
+    let MeFriend = new Friend(newMe.id)
     sendRequest(requestURLusers).then(data => {
-        debugger
         for (let i = 0; i < data.length; i++) {
             if (data[i].id == newMe.id) {
                 myFriends = data[i].Friends;
@@ -90,10 +98,10 @@ function addFriend(id) {
                 return;
             }
         }
-        newMe.Friends.push(id);
+        newMe.Friends.push(Friend);
         localStorage.meUser = JSON.stringify(newMe)
-        myFriends.push(id)
-        friendFriends.push(newMe.id)
+        myFriends.push(Friend)
+        friendFriends.push(MeFriend)
         printFriend();
         fetch(requestURLusers + "/" + newMe.id, {
             method: "PATCH",
@@ -126,7 +134,7 @@ function deleteFriend(id) {
     for (let i = 0; i < UsersMy.length; i++) {
         if(UsersMy[i].id == newMe.id){
             for (let j = 0; j < UsersMy[i].Friends.length; j++) {
-                if (UsersMy[i].Friends[j] == id){
+                if (UsersMy[i].Friends[j].Id == id){
                     booleanCheck = false;
                 }
             }
@@ -145,16 +153,22 @@ function deleteFriend(id) {
                 friendFriends = data[i].Friends;
             }
         }
-        let deleteIndex = myFriends.indexOf(id)
-        if(deleteIndex !== -1){
-            myFriends.splice(deleteIndex,1);
-            friendFriends.splice(deleteIndex,1)
+        for (let i = 0; i < myFriends.length; i++) {
+            if (myFriends[i].Id == id){
+                myFriends.splice(i,1);
+            }
+
+        }
+        for (let i = 0; i < friendFriends.length; i++) {
+            if (friendFriends[i].Id == id){
+                friendFriends.splice(i,1);
+            }
         }
         newMe.Friends = myFriends;
         localStorage.meUser = JSON.stringify(newMe)
         printFriend();
         if (newMe.Friends.length >= 1){
-            printChat(newMe.Friends[0])
+            printChat(newMe.Friends[0].Id)
         }
         if(newMe.Friends.length == 0){
             printChat(-1)
@@ -196,19 +210,23 @@ function infoCheck() {
                         data[i].Friends.forEach(user=>{
                             let myMessages = 0;
                             let newMyMessages = 0;
-                            for (let j = 0; j < data[i].Messages.length; j++) {
-                                if(user == data[i].Messages[j].FromUserId||user == data[i].Messages[j].ToUserId){
-                                    newMyMessages += 1;
+                            for (let j = 0; j < meObj.Messages.length; j++) {
+                                if(user.Id == meObj.Messages[j].FromUserId){
+                                    myMessages += 1;
+                                    meObj.Messages.splice(j,1);
+                                    j -= 1;
                                 }
                             }
-                            for (let j = 0; j < meObj.Messages.length; j++) {
-                                if(user == meObj.Messages[j].FromUserId||user == meObj.Messages[j].ToUserId){
-                                    myMessages += 1;
+                            for (let j = 0; j < data[i].Messages.length; j++) {
+                                if(user.Id == data[i].Messages[j].FromUserId){
+                                    newMyMessages += 1;
+                                    meObj.Messages.push(data[i].Messages[j])
                                 }
-                                if (meObj.Messages.length == (j + 1)){
+                                if (data[i].Messages.length == (j + 1)){
                                     let count = (newMyMessages - myMessages)
+                                    localStorage.meUser = JSON.stringify(data[i]);
                                     if(count > 0){
-                                        printNotification(count,user)
+                                        printNotification(count,user.Id)
                                     }
 
                                 }
@@ -216,7 +234,6 @@ function infoCheck() {
                         })
                         for (let j = 0; j < data[i].Messages.length; j++) {
                             if ((data[i].Messages[j].FromUserId == localStorage.toUser) && (data[i].Messages[j].ToUserId == meObj.id) || (data[i].Messages[j].FromUserId == meObj.id) && (data[i].Messages[j].ToUserId == localStorage.toUser)) {
-
                                 let html = printMessages(data[i], fromUser);
                                 document.querySelector('.messenger-main__chat-list').innerHTML = html
                             }
@@ -262,7 +279,27 @@ function prototypeFunctions() {
     }
 }
 function printNotification(count,user){
-    document.querySelector('.message-number'+user).innerHTML = count;
+    if(typeof count == 'number'){
+        if(document.querySelector('.message-number'+user).innerHTML == ''){
+            document.querySelector('.message-number'+user).innerHTML = count;
+        }
+        else if(user == -1){
+            return
+        }
+        else{
+            let newCount = parseInt(document.querySelector('.message-number'+user).innerHTML)
+            newCount += count
+            document.querySelector('.message-number'+user).innerHTML = newCount;
+        }
+    }
+    else{
+        if (user>0){
+            document.querySelector('.message-number'+user).innerHTML = count;
+        }
+        else{
+            return;
+        }
+    }
 }
 function printAccountInfo(obj){
     if (booleanInfo){
@@ -286,7 +323,9 @@ function printAccountInfo(obj){
         html += "<span id='name-text' class='messenger-user__username-text'>@" + obj.Login + "</span>"
         document.querySelector('.messenger-user__username-block').innerHTML = html;
         document.querySelector('.messenger-user__person').innerHTML =
-            '<h2 id="name" class="messenger-user__name">' +obj.Login +'</h2><span class="messenger-user__status">Status</span>'
+            '<h2 id="name" class="messenger-user__name">' +obj.Login +'</h2>' +
+            '<span class="messenger-user__status">Status</span>' +
+            '</div><div class="status-block" contenteditable="true"></div>'
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + obj.Email + '</span>';
         booleanInfo = !booleanInfo;
@@ -298,7 +337,7 @@ function printFriend() {
     let obj = JSON.parse(localStorage.meUser);
     for (let i = 0; i < obj.Friends.length; i++) {
         for (let j = 0; j < UsersMy.length; j++) {
-            if (UsersMy[j].id === obj.Friends[i]) {
+            if (UsersMy[j].id === obj.Friends[i].Id) {
                 html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" onclick="printChat(' + UsersMy[j].id + ')"><a href="#">'
                 html += '<img src="./img/manifest/messenger/user.png" alt="user"><h2 class="messenger-nav-2__friend--user">' + UsersMy[j].Login + '</h2><span class="message-number message-number'+UsersMy[j].id+'"></span></a></li></ul>'
                 break;
@@ -312,7 +351,7 @@ function printChat(userID) {
     let obj;
     let myObject = JSON.parse(localStorage.meUser)
     for (let i = 0; i < myObject.Friends.length; i++) {
-        if (myObject.Friends[i] === userID) {
+        if (myObject.Friends[i].Id === userID) {
             for (let j = 0; j < UsersMy.length; j++) {
                 if (UsersMy[j].id === userID) {
                     obj = UsersMy[j];
@@ -321,6 +360,7 @@ function printChat(userID) {
         }
 
     }
+    printNotification('',userID)
     let html = ``;
     let message;
     if(UserId == -1 || myObject.Friends.length == 0){
@@ -334,7 +374,7 @@ function printChat(userID) {
     html += `<button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
     <div class="messenger-main__settings"><div class="messenger-nav-2__search">
     <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
-    <button class="messenger-main__notification messenger-main__notification--active"></button><button class="messenger-main__other"></button></div></div>`
+    <div class="messenger-main__notification--block"><ol class="messenger-main__notification-list ulres "><li>Новое сообщение от Timur</li></ol><button class="messenger-main__notification messenger-main__notification--active"></button></div><button class="messenger-main__other"></button></div></div>`
 
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
@@ -411,7 +451,7 @@ function EmojiPrint(src){
     document.querySelector('.messenger-main__message-text').insertAdjacentHTML("beforeend", "<img src='"+src+"' class=\"messenger-main__emoji-image\">")
 }
 function printMessages(obj, fromObj) {
-    if (obj.Friends.length === 0) {
+    if (obj.Friends.length == 0) {
         return;
     }
     if (typeof fromObj == 'number') {
