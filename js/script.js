@@ -80,7 +80,7 @@ function addFriend(id) {
     let newMe = JSON.parse(localStorage.meUser);
     let myFriends;
     let friendFriends;
-    let Friend = new Friend(id)
+    let friend = new Friend(id)
     let MeFriend = new Friend(newMe.id)
     sendRequest(requestURLusers).then(data => {
         for (let i = 0; i < data.length; i++) {
@@ -98,9 +98,9 @@ function addFriend(id) {
                 return;
             }
         }
-        newMe.Friends.push(Friend);
+        newMe.Friends.push(friend);
         localStorage.meUser = JSON.stringify(newMe)
-        myFriends.push(Friend)
+        myFriends.push(friend)
         friendFriends.push(MeFriend)
         printFriend();
         fetch(requestURLusers + "/" + newMe.id, {
