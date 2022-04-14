@@ -93,15 +93,15 @@ function addFriend(id) {
             }
         }
         for (let i = 0; i < myFriends.length; i++) {
-            if (myFriends[i] == id){
+            if (myFriends[i].Id == id){
                 alert('Есть уже этот друг')
                 return;
             }
         }
         newMe.Friends.push(friend);
         localStorage.meUser = JSON.stringify(newMe)
-        myFriends.push(friend)
-        friendFriends.push(MeFriend)
+        myFriends.push(friend);
+        friendFriends.push(MeFriend);
         printFriend();
         fetch(requestURLusers + "/" + newMe.id, {
             method: "PATCH",
@@ -214,7 +214,6 @@ function infoCheck() {
                 if (meObj.id === data[i].id) {
                     if (meObj.Messages.length < data[i].Messages.length){
                         data[i].Friends.forEach(user=>{
-                            debugger
                             if(user.Id !== parseInt(localStorage.toUser)) {
                                 let myMessages = 0;
                                 let newMyMessages = 0;
@@ -291,6 +290,15 @@ function printNotification(count,user){
     let indexOfFriend;
     let FriendLogin;
     let html = '';
+    let childNodes;
+    debugger
+    childNodes = document.querySelector('.messenger-main__notification-list').childNodes;
+    if (childNodes.length == 0){
+        document.querySelector('.messenger-main__notification').classList.remove('messenger-main__notification--active')
+    }
+    else if(childNodes.length > 0){
+        document.querySelector('.messenger-main__notification').classList.add('messenger-main__notification--active')
+    }
     for (let i = 0; i < newMe.Friends.length; i++) {
         if(newMe.Friends[i].Id == user.Id){
             indexOfFriend = i;
@@ -310,13 +318,12 @@ function printNotification(count,user){
     }
     if(document.querySelector('.message-number'+user.Id).innerHTML == ''){
         document.querySelector('.message-number'+user.Id).innerHTML = count;
-        debugger
         newMe.Friends[indexOfFriend].Notification = count;
         if(count == 1){
-            html = '<li>Новое сообщение от '+FriendLogin+'</li>'
+            html = '<li id="'+user.id+'">Новое сообщение от '+FriendLogin+'</li>'
         }
         else if(count > 1){
-            html = '<li>'+count+' новых сообщений от '+FriendLogin+'</li>'
+            html = '<li id="'+user.id+'>'+count+' новых сообщений от '+FriendLogin+'</li>'
         }
         document.querySelector('.messenger-main__notification-list').innerHTML += html;
     }
@@ -327,12 +334,13 @@ function printNotification(count,user){
         let newCount = parseInt(document.querySelector('.message-number'+user.Id).innerHTML)
         newCount += count
         if(newCount == 1){
-            html = '<li>Новое сообщение от '+FriendLogin+'</li>'
+            html = '<li id="'+user.id+'>Новое сообщение от '+FriendLogin+'</li>'
+            document.querySelector('.messenger-main__notification-list').innerHTML += html;
         }
         else if(newCount > 1){
-            html = '<li>'+newCount+' новых сообщений от '+FriendLogin+'</li>'
+            html = newCount+' новых сообщений от '+FriendLogin
+            document.getElementById(user.id).innerHTML = html;
         }
-        document.querySelector('.messenger-main__notification-list').innerHTML += html;
         document.querySelector('.message-number'+user.Id).innerHTML = newCount;
         newMe.Friends[indexOfFriend].Notification = newCount;
     }
@@ -445,7 +453,7 @@ function printChat(userID) {
     html += `<button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
     <div class="messenger-main__settings"><div class="messenger-nav-2__search">
     <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
-    <div class="messenger-main__notification--block"><ol class="messenger-main__notification-list ulres "></ol><button class="messenger-main__notification messenger-main__notification--active"></button></div><button class="messenger-main__other"></button></div></div>`
+    <div class="messenger-main__notification--block"><ol class="messenger-main__notification-list ulres "></ol><button class="messenger-main__notification"></button></div><button class="messenger-main__other"></button></div></div>`
 
     html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
     html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
