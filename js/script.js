@@ -349,7 +349,7 @@ function printAccountInfo(obj){
             '<h2 id="name" class="messenger-user__name">' +me.Login +'</h2>' +
             '<div class="messenger-user__person--edit">' + '<span class="messenger-user__status">Status</span>' +
             '<button type="button" class="messenger-user__edit"></button>' +
-            '</div><div class="status-block" contenteditable="true"></div>'
+            '</div><div class="status-block" contenteditable="false">'+me.Status+'</div>'
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>'
         booleanInfo = !booleanInfo;
@@ -357,6 +357,17 @@ function printAccountInfo(obj){
             if(document.querySelector('.status-block').contentEditable == "true"){
                 document.querySelector('.messenger-user__edit').style.background = 'url("img/manifest/icons/edit.svg") no-repeat center';
                 document.querySelector('.status-block').contentEditable = "false";
+                me.Status = document.querySelector('.status-block').innerHTML;
+                localStorage.meUser = JSON.stringify(me);
+                fetch(requestURLusers + "/" + me.id, {
+                    method: "PATCH",
+                    body: JSON.stringify({
+                        Status:document.querySelector('.status-block').innerHTML
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    }
+                })
             }
             else{
                 document.querySelector('.messenger-user__edit').style.background = 'url("img/manifest/icons/apply.svg") no-repeat center';
@@ -373,7 +384,7 @@ function printAccountInfo(obj){
         document.querySelector('.messenger-user__person').innerHTML =
             '<h2 id="name" class="messenger-user__name">' +obj.Login +'</h2>' +
             '<span class="messenger-user__status">Status</span>' +
-            '</div><div class="status-block" contenteditable="true"></div>'
+            '</div><div class="status-block">'+obj.Status+'</div>'
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + obj.Email + '</span>';
         booleanInfo = !booleanInfo;
