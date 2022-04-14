@@ -1121,6 +1121,7 @@ h3 {
     margin-top: 10px;
     border-radius: 5px;
     padding: 5px;
+    min-height: 40px;
     max-width: 12vw;
     max-height: 100px;
     overflow-x: hidden;
