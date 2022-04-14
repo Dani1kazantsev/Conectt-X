@@ -8,7 +8,9 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
         alert("слишком короткий пароль");
         return;
     }
+
     if(endReg){
+        endReg = false;
         sendRequest(requestURLusers).then(Users => {
             for(let i = 0; i< Users.length; i++){
                 if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
@@ -16,7 +18,6 @@ document.querySelector('.register-main__btn').addEventListener('click', (e) => {
                     return;
                 }
             }
-            endReg = false;
             let obj = new User(loginValue, passwordValue, emailValue);
             localStorage.clear();
             localStorage.setItem('meUser', JSON.stringify(obj));
@@ -39,6 +40,7 @@ document.querySelector('.register__form').addEventListener('submit', (e) => {
         return;
     }
     if(endReg){
+        endReg = false;
         sendRequest(requestURLusers).then(Users => {
             for (let i = 0; i < Users.length; i++) {
                 if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
@@ -46,7 +48,6 @@ document.querySelector('.register__form').addEventListener('submit', (e) => {
                     return;
                 }
             }
-            endReg = false;
             let obj = new User(loginValue, passwordValue, emailValue);
             localStorage.clear();
             localStorage.setItem('meUser', JSON.stringify(obj));

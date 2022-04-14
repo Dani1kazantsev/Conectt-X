@@ -9,6 +9,21 @@ sendRequest(requestURLusers).then(data => {
         if (user.id == JSON.parse(localStorage.meUser).id){
             me = JSON.parse(localStorage.meUser)
             me.Messages = user.Messages;
+            if(me.Friends.length < user.Friends.length){
+                let boolean;
+                let index;
+                user.Friends.forEach(friend=>{
+                    if(me.Friends.some(e=>e.Id == friend.Id)){
+                        boolean = true;
+                    }
+                    boolean = false;
+                    index = friend;
+                })
+                if(boolean == false){
+                    me.Friends.push(index)
+                }
+            }
+
             localStorage.meUser = JSON.stringify(me);
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){

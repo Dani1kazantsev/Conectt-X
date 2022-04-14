@@ -212,6 +212,35 @@ function infoCheck() {
             });
             for (let i = 0; i < data.length; i++) {
                 if (meObj.id === data[i].id) {
+                    if(meObj.Friends.length < data[i].Friends.length){
+                        let boolean;
+                        let obj;
+                        for (let j = 0; j < data[i].Friends.length; j++) {
+                            data[i].Friends.forEach(friend=>{
+                                if(meObj.Friends.some(e=>e.Id == friend.Id)){
+                                    boolean = true;
+                                }
+                                boolean = false;
+                                obj = friend;
+                            })
+                            if(boolean == false){
+                                data.forEach(user=>{
+                                    if(user.id == obj.Id){
+                                        UsersMy.push(user);
+                                        boolean = true;
+                                    }
+                                })
+                            }
+                            meObj.Friends = data[i].Friends;
+                            localStorage.meUser = JSON.stringify(meObj);
+                            printFriend();
+                        }
+                    }
+                    else if(meObj.Friends.length > data[i].Friends.length){
+                        meObj.Friends = data[i].Friends;
+                        localStorage.meUser = JSON.stringify(meObj);
+                        printFriend();
+                    }
                     if (meObj.Messages.length < data[i].Messages.length){
                         data[i].Friends.forEach(user=>{
                             if(user.Id !== parseInt(localStorage.toUser)) {
@@ -231,7 +260,7 @@ function infoCheck() {
                                     }
                                     if (data[i].Messages.length == (j + 1)){
                                         let count = (newMyMessages - myMessages)
-                                        localStorage.meUser = JSON.stringify(data[i]);
+                                        localStorage.meUser = JSON.stringify(meObj);
                                         if(count > 0){
                                             printNotification(count,user);
                                         }
@@ -291,13 +320,8 @@ function printNotification(count,user){
     let FriendLogin;
     let html = '';
     let childNodes;
-    debugger
-    childNodes = document.querySelector('.messenger-main__notification-list').childNodes;
-    if (childNodes.length == 0){
-        document.querySelector('.messenger-main__notification').classList.remove('messenger-main__notification--active')
-    }
-    else if(childNodes.length > 0){
-        document.querySelector('.messenger-main__notification').classList.add('messenger-main__notification--active')
+    if (user == -1){
+    return;
     }
     for (let i = 0; i < newMe.Friends.length; i++) {
         if(newMe.Friends[i].Id == user.Id){
@@ -307,59 +331,59 @@ function printNotification(count,user){
     }
     for (let i = 0; i < UsersMy.length; i++) {
         if (UsersMy[i].id == user.Id){
-            FriendLogin = UsersMy[i].Login
+            FriendLogin = UsersMy[i].Login;
         }
     }
+    //Очищение уведов
     if (count == 0){
         document.querySelector('.message-number'+user.Id).innerHTML = '';
         newMe.Friends[indexOfFriend].Notification = 0;
-        localStorage.meUser = JSON.stringify(newMe)
+        localStorage.meUser = JSON.stringify(newMe);
+        document.getElementById(user.Id);
         return;
     }
-    if(document.querySelector('.message-number'+user.Id).innerHTML == ''){
-        document.querySelector('.message-number'+user.Id).innerHTML = count;
-        newMe.Friends[indexOfFriend].Notification = count;
-        if(count == 1){
-            html = '<li id="'+user.id+'">Новое сообщение от '+FriendLogin+'</li>'
-        }
-        else if(count > 1){
-            html = '<li id="'+user.id+'>'+count+' новых сообщений от '+FriendLogin+'</li>'
-        }
-        document.querySelector('.messenger-main__notification-list').innerHTML += html;
-    }
-    else if(user.id == -1){
-        return;
+    //Выведение уведов
+    let newCount = parseInt(document.querySelector('.message-number'+user.Id).innerHTML);
+    if(newCount == NaN){
+        newCount = count;
     }
     else{
-        let newCount = parseInt(document.querySelector('.message-number'+user.Id).innerHTML)
-        newCount += count
-        if(newCount == 1){
-            html = '<li id="'+user.id+'>Новое сообщение от '+FriendLogin+'</li>'
-            document.querySelector('.messenger-main__notification-list').innerHTML += html;
-        }
-        else if(newCount > 1){
-            html = newCount+' новых сообщений от '+FriendLogin
-            document.getElementById(user.id).innerHTML = html;
-        }
-        document.querySelector('.message-number'+user.Id).innerHTML = newCount;
-        newMe.Friends[indexOfFriend].Notification = newCount;
+        newCount += count;
     }
-    localStorage.meUser = JSON.stringify(newMe)
+    if(newCount == 1){
+        html = '<li id="'+user.Id+'>Новое сообщение от '+FriendLogin+'</li>';
+        document.querySelector('.messenger-main__notification-list').innerHTML += html;
+    }
+    else if(newCount > 1){
+        html = newCount+' новых сообщений от '+ FriendLogin;
+        document.getElementById(user.Id).innerHTML = html;
+    }
+    document.querySelector('.message-number'+user.Id).innerHTML = newCount;
+    newMe.Friends[indexOfFriend].Notification = newCount;
+    childNodes = document.querySelector('.messenger-main__notification-list').childNodes;
+    //Скрипт для active класса
+    if (childNodes.length == 0){
+        document.querySelector('.messenger-main__notification').classList.remove('messenger-main__notification--active')
+    }
+    else if(childNodes.length > 0){
+        document.querySelector('.messenger-main__notification').classList.add('messenger-main__notification--active')
+    }
+    localStorage.meUser = JSON.stringify(newMe);
 }
 function printAccountInfo(obj){
     if (booleanInfo){
         let me = JSON.parse(localStorage.meUser);
-        document.querySelector('.messenger-user__photo').src = me.Avatar
-        html = "<span class='messenger-user__username'>" + me.Login + "</span>"
-        html += "<span id='name-text' class='messenger-user__username-text'>@" + me.Login + "</span>"
+        document.querySelector('.messenger-user__photo').src = me.Avatar;
+        html = "<span class='messenger-user__username'>" + me.Login + "</span>";
+        html += "<span id='name-text' class='messenger-user__username-text'>@" + me.Login + "</span>";
         document.querySelector('.messenger-user__username-block').innerHTML = html;
         document.querySelector('.messenger-user__person').innerHTML =
             '<h2 id="name" class="messenger-user__name">' +me.Login +'</h2>' +
             '<div class="messenger-user__person--edit">' + '<span class="messenger-user__status">Status</span>' +
             '<button type="button" class="messenger-user__edit"></button>' +
-            '</div><div class="status-block" contenteditable="false">'+me.Status+'</div>'
+            '</div><div class="status-block" contenteditable="false">'+me.Status+'</div>';
         document.querySelector('.messenger-user__username-block-email').innerHTML =
-            '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>'
+            '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>';
         booleanInfo = !booleanInfo;
         document.querySelector('.messenger-user__edit').addEventListener('click',()=>{
             if(document.querySelector('.status-block').contentEditable == "true"){
@@ -401,9 +425,12 @@ function printAccountInfo(obj){
 
 function printFriend() {
     let html = "<h2 class=\"messenger-nav-2__title\">friends</h2>";
+    debugger
+    if(JSON.parse(localStorage.meUser).Friends.length == 0){
+        document.querySelector('.messenger-nav-2__friends').innerHTML = html;
+    }
     for (let i = 0; i < UsersMy.length; i++) {
         if(UsersMy[i].id !== JSON.parse(localStorage.meUser).id){
-            if(i > 0){
                 html = ''
                 html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" id="messenger-nav-2__friend'+UsersMy[i].id+'"><a href="#">'
                 html += '<img src="./img/manifest/messenger/user.png" alt="user"><h2 class="messenger-nav-2__friend--user">' + UsersMy[i].Login + '</h2><span class="message-number message-number'+UsersMy[i].id+'"></span></a></li></ul>'
@@ -411,16 +438,6 @@ function printFriend() {
                 document.getElementById('messenger-nav-2__friend'+UsersMy[i].id).addEventListener('click',()=>{
                     printChat(UsersMy[i].id)
                 });
-            }
-            else{
-                html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" id="messenger-nav-2__friend'+UsersMy[i].id+'"><a href="#">'
-                html += '<img src="./img/manifest/messenger/user.png" alt="user"><h2 class="messenger-nav-2__friend--user">' + UsersMy[i].Login + '</h2><span class="message-number message-number'+UsersMy[i].id+'"></span></a></li></ul>'
-                document.querySelector('.messenger-nav-2__friends').innerHTML = html;
-                document.getElementById('messenger-nav-2__friend'+UsersMy[i].id).addEventListener('click',()=>{
-                    printChat(UsersMy[i].id)
-                });
-            }
-
         }
     }
 }
@@ -438,13 +455,13 @@ function printChat(userID) {
             }
             user = myObject.Friends[i]
         }
-
     }
     let html = ``;
     let message;
     if(UserId == -1 || myObject.Friends.length == 0){
         html  += `<div class="messenger-main__header"><div class="messenger-main__chat-preview"><span class="messenger-main__name">None</span>`
         message = 'Заведи сначала друзей)'
+        user = -1;
     }
     else{
         message = printMessages(myObject, obj)
