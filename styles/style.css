@@ -244,19 +244,20 @@ body {
 }
 
 .messenger-main__notification-list {
+    display: none;
     position: absolute;
     top: 20px;
-    overflow-y: scroll;
+    overflow-x: scroll;
     left: -230px;
-    flex-wrap: wrap;
-    width: 250px;
-    height: 100px;
-    transition: 0.5s;
+    width: 0;
+    height: 0;
+    transition: 0.1s;
     padding: 10px;
     flex-direction: column;
     gap: 10px;
     border-radius: 10px;
     background: rgba(39, 39, 39, 0.90);
+    font-size: 15px;
 }
 
 .messenger-main__notification-list li {
@@ -264,7 +265,6 @@ body {
     padding-bottom: 5px;
     max-width: 100%;
     text-overflow: ellipsis;
-    overflow: hidden;
 }
 
 .messenger-main__notification-list::-webkit-scrollbar {

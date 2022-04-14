@@ -7,6 +7,9 @@ sendRequest(requestURLusers).then(data => {
     let me;
     data.forEach(user=>{
         if (user.id == JSON.parse(localStorage.meUser).id){
+            me = JSON.parse(localStorage.meUser)
+            me.Messages = user.Messages;
+            localStorage.meUser = JSON.stringify(me);
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){
                     if(data[j].id === user.Friends[i].Id){
@@ -17,10 +20,9 @@ sendRequest(requestURLusers).then(data => {
         }
         if (user.Login == JSON.parse(localStorage.meUser).Login) {
             me = user;
-            if(JSON.parse(localStorage.meUser.id == undefined)){
+            if(JSON.parse(localStorage.meUser).id == undefined){
                 localStorage.meUser = JSON.stringify(user);
             }
-
             UsersMy.push(JSON.parse(localStorage.meUser))
             UserId = JSON.parse(localStorage.meUser).id;
         }
@@ -28,11 +30,16 @@ sendRequest(requestURLusers).then(data => {
     })
     printAccountInfo(me);
     printFriend();
-    if(me.Friends.length !=0){
+    if(me.Friends.length !== 0){
         printChat(me.Friends[0].Id);
     }
     else{
         printChat(-1);
+    }
+    if(JSON.parse(localStorage.meUser).id !== undefined){
+        JSON.parse(localStorage.meUser).Friends.forEach(Friend=>{
+            printNotification(Friend.Notification,Friend)
+        });
     }
     infoCheck();
 })
@@ -188,7 +195,6 @@ function changed() {
         words = textarea.value.split(" ");
         data.forEach((f) => {
             if(f.id != JSON.parse(localStorage.meUser).id){
-                debugger
                 results.push(
                     new Result(words[words.length - 1].toLowerCase(), f)
                 );
