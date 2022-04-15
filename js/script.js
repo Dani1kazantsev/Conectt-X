@@ -267,9 +267,9 @@ function infoCheck() {
                                 for (let j = 0; j < data[i].Messages.length; j++) {
                                     if(user.Id == data[i].Messages[j].FromUserId){
                                         newMyMessages += 1;
-                                        meObj.Messages.push(data[i].Messages[j])
                                     }
                                     if (data[i].Messages.length == (j + 1)){
+                                        meObj.Messages = data[i].Messages
                                         let count = (newMyMessages - myMessages)
                                         if(count > 0){
                                             localStorage.meUser = JSON.stringify(meObj);
@@ -308,7 +308,7 @@ function prototypeFunctions() {
                 html += "<div class='message-from'><p>" + this.Messages[i].Message + "</p><span class='message__time--from'>"
                     + data.getHours() +":"+minutes+"</span></div>";
             }
-            if (this.Messages[i].ToUserId === fromObj.id){
+            else if (this.Messages[i].ToUserId === fromObj.id){
                 let data = new Date(Date.parse(this.Messages[i].Data));
                 let minutes;
                 if(data.getMinutes() < 10){
