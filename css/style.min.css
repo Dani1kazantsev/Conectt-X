@@ -805,7 +805,6 @@ h3 {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 5%;
     padding: 1%;
     background: url(../img/manifest/messenger/chennels-back.png)
 }

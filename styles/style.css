@@ -47,6 +47,7 @@ body {
 }
 .messenger-user__photo {
     width: 100%;
+    object-fit: cover;
 }
 .messenger-user__photo--before{
     position: relative;
@@ -75,6 +76,7 @@ body {
 
 .messenger-user__photo--container {
     display: flex;
+    max-height: 220px;
 }
 
 .messenger-user__input-upload {
@@ -270,6 +272,7 @@ body {
     font-size: 16px;
     font-weight: normal;
     width: 85%;
+    white-space: nowrap;
     text-overflow: ellipsis ;
     overflow: hidden;
 }
