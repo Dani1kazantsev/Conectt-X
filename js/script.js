@@ -363,7 +363,7 @@ function printNotification(count,user){
     }
     childNodes = document.querySelector('.messenger-main__notification-list').childNodes;
     if(newCount == 1){
-        html = '<li id="'+user.Id+'>Новое сообщение от '+FriendLogin+'</li>';
+        html = '<li id="'+user.Id+'">Новое сообщение от '+FriendLogin+'</li>';
         document.querySelector('.messenger-main__notification-list').innerHTML += html;
     }
     else if(newCount > 1){
