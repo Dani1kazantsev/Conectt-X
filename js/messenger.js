@@ -10,20 +10,20 @@ sendRequest(requestURLusers).then(data => {
             me = JSON.parse(localStorage.meUser)
             me.Messages = user.Messages;
             if(me.Friends.length < user.Friends.length){
-                let boolean;
-                let index;
                 user.Friends.forEach(friend=>{
-                    if(me.Friends.some(e=>e.Id == friend.Id)){
-                        boolean = true;
+                    if(me.Friends.some(e=>e.Id == friend.Id) == false){
+                        me.Friends.push(friend);
                     }
-                    boolean = false;
-                    index = friend;
                 })
-                if(boolean == false){
-                    me.Friends.push(index)
-                }
             }
-
+            else if(me.Friends.length > user.Friends.length){
+                me.Friends.forEach(friend=>{
+                    if(user.Friends.some(e=>e.Id == friend.Id) == false){
+                        let index = me.Friends.indexOf(friend);
+                        me.Friends.splice(index,1)
+                    }
+                })
+            }
             localStorage.meUser = JSON.stringify(me);
             for (let i = 0; i < user.Friends.length; i++) {
                 for (let j = 0; j < data.length; j++){
