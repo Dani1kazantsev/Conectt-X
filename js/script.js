@@ -59,14 +59,7 @@ class Social {
 /*
 3)Уведомление.
  */
-document.querySelector('.messenger-user__photo--container').addEventListener('mouseenter',()=>{
-    document.querySelector('.messenger-user__photo--container').classList.add('messenger-user__photo--before');
-    document.querySelector('.messenger-user__btn').style.display = 'block';
-})
-document.querySelector('.messenger-user__photo--container').addEventListener('mouseleave',()=>{
-    document.querySelector('.messenger-user__photo--container').classList.remove('messenger-user__photo--before')
-    document.querySelector('.messenger-user__btn').style.display = 'none';
-})
+
 function sendRequest(url) {
     return fetch(url).then(response => {
         return response.json();
@@ -404,7 +397,10 @@ function printNotification(count,user){
 function printAccountInfo(obj){
     if (booleanInfo){
         let me = JSON.parse(localStorage.meUser);
-        document.querySelector('.messenger-user__photo').src = me.Avatar;
+        document.querySelector('.messenger-user__photo').innerHTML =
+            '<div class="messenger-user__photo--container" id="UserPhoto'+me.id+'">' +
+            '<img src="'+me.Avatar+'" alt="user" class="messenger-user__photo">' +
+            ' <label class="messenger-user__btn" for="image__upload"></label> <input id="image__upload" type="file" accept=".png, .jpg, .jpeg" class="messenger-user__input-upload">'
         html = "<span class='messenger-user__username'>" + me.Login + "</span>";
         html += "<span id='name-text' class='messenger-user__username-text'>@" + me.Login + "</span>";
         document.querySelector('.messenger-user__username-block').innerHTML = html;
@@ -416,6 +412,35 @@ function printAccountInfo(obj){
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>';
         booleanInfo = !booleanInfo;
+        document.getElementById('UserPhoto'+me.id).addEventListener('mouseenter',()=>{
+            document.querySelector('.messenger-user__photo--container').classList.add('messenger-user__photo--before');
+            document.querySelector('.messenger-user__btn').style.display = 'block';
+        })
+        document.getElementById('UserPhoto'+me.id).addEventListener('mouseleave',()=>{
+            document.querySelector('.messenger-user__photo--container').classList.remove('messenger-user__photo--before')
+            document.querySelector('.messenger-user__btn').style.display = 'none';
+        })
+        document.getElementById('image__upload').addEventListener('change',()=>{
+            let fileList = document.getElementById('image__upload').files;
+            let reader = new FileReader();
+            reader.onloadend = () =>{
+                fetch(requestURLusers + '/' + JSON.parse(localStorage.meUser).id,{
+                    method: "PATCH",
+                    body:JSON.stringify({
+                        Avatar:reader.result
+                    }),
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    }
+                }).then(()=>{
+                    me.Avatar = reader.result;
+                    localStorage.meUser = JSON.stringify(me);
+                    booleanInfo = !booleanInfo
+                    printAccountInfo(JSON.parse(localStorage.meUser));
+                })
+            }
+            reader.readAsDataURL(fileList[0]);
+        })
         document.querySelector('.messenger-user__edit').addEventListener('click',()=>{
             if(document.querySelector('.status-block').contentEditable == "true"){
                 document.querySelector('.messenger-user__edit').style.background = 'url("img/manifest/icons/edit.svg") no-repeat center';
@@ -440,7 +465,10 @@ function printAccountInfo(obj){
         })
     }
     else if(booleanInfo == false){
-        document.querySelector('.messenger-user__photo').src = obj.Avatar
+        document.querySelector('.messenger-user__photo').innerHTML =
+            '<div class="messenger-user__photo--container"><img src="'+obj.Avatar+'" alt="user" class="messenger-user__photo">' +
+            ' <label class="messenger-user__btn" for="image__upload"></label> <input id="image__upload" type="file" accept=".png, .jpg, .jpeg" class="messenger-user__input-upload">'
+
         html = "<span class='messenger-user__username'>" + obj.Login + "</span>"
         html += "<span id='name-text' class='messenger-user__username-text'>@" + obj.Login + "</span>"
         document.querySelector('.messenger-user__username-block').innerHTML = html;

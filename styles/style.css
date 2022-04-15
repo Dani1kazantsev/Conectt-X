@@ -42,7 +42,9 @@ body {
 .user__name {
     text-align: center;
 }
-
+.messenger-user{
+    width: 15%;
+}
 .messenger-user__photo {
     width: 100%;
 }

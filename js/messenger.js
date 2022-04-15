@@ -9,6 +9,7 @@ sendRequest(requestURLusers).then(data => {
         if (user.id == JSON.parse(localStorage.meUser).id){
             me = JSON.parse(localStorage.meUser)
             me.Messages = user.Messages;
+            me.Avatar = user.Avatar;
             if(me.Friends.length < user.Friends.length){
                 user.Friends.forEach(friend=>{
                     if(me.Friends.some(e=>e.Id == friend.Id) == false){
@@ -57,6 +58,7 @@ sendRequest(requestURLusers).then(data => {
         });
     }
     infoCheck();
+
 })
 
 var results = [];
