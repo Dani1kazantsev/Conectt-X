@@ -411,6 +411,7 @@ function printAccountInfo(obj){
             '</div><div class="status-block" contenteditable="false">'+me.Status+'</div>';
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + me.Email + '</span>';
+        document.querySelector('.messenger-user__btn--cont').innerHTML = '<a href="index.html" class="messenger-user__message">Выйти</a>'
         booleanInfo = !booleanInfo;
         document.getElementById('UserPhoto'+me.id).addEventListener('mouseenter',()=>{
             document.querySelector('.messenger-user__photo--container').classList.add('messenger-user__photo--before');
@@ -478,6 +479,7 @@ function printAccountInfo(obj){
             '</div><div class="status-block">'+obj.Status+'</div>'
         document.querySelector('.messenger-user__username-block-email').innerHTML =
             '<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">' + obj.Email + '</span>';
+        document.querySelector('.messenger-user__btn--cont').innerHTML = ''
         booleanInfo = !booleanInfo;
     }
 }

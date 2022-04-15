@@ -1039,7 +1039,9 @@ h3 {
     background: url(../img/manifest/messenger/git.svg) no-repeat;
     background-size: cover
 }
-
+.messenger-user__btn--cont{
+    width: 100%;
+}
 .messenger-user__message {
     border: 0;
     outline: 0;
@@ -1049,6 +1051,8 @@ h3 {
     background: #3577ef;
     padding: 2%;
     text-align: center;
+    width: 100%;
+    display: inline-block;
     border-radius: 5px
 }
 
