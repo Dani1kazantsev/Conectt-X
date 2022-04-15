@@ -59,6 +59,14 @@ class Social {
 /*
 3)Уведомление.
  */
+document.querySelector('.messenger-user__photo--container').addEventListener('mouseenter',()=>{
+    document.querySelector('.messenger-user__photo--container').classList.add('messenger-user__photo--before');
+    document.querySelector('.messenger-user__btn').style.display = 'block';
+})
+document.querySelector('.messenger-user__photo--container').addEventListener('mouseleave',()=>{
+    document.querySelector('.messenger-user__photo--container').classList.remove('messenger-user__photo--before')
+    document.querySelector('.messenger-user__btn').style.display = 'none';
+})
 function sendRequest(url) {
     return fetch(url).then(response => {
         return response.json();

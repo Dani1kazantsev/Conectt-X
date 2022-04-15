@@ -46,6 +46,25 @@ body {
 .messenger-user__photo {
     width: 100%;
 }
+.messenger-user__photo--before{
+    position: relative;
+}
+.messenger-user__photo--before::before{
+    content: '';
+    position: absolute;
+    height: 98%;
+    width: 100%;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.18);
+}
+.messenger-user__btn{
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 3;
+    transform: translate(-50%, -50%)
+}
 .messenger-main__chat-list {
     display: flex;
     gap: 10px;
