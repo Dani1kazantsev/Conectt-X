@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html class="page" lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="img/manifest/icons/logo.svg" sizes="12x12" type="image/x-svg">
+    <link rel="stylesheet" href="css/style.min.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="node_modules/codemirror/theme/3024-night.css">
+    <link rel="stylesheet" href="node_modules/codemirror/theme/monokai.css">
+    <link rel="stylesheet" href="styles/emmet.css">
+    <title>Conectt</title>
+</head>
+<body class="messenger page__body">
+<script src="node_modules/codemirror/lib/codemirror.js"></script>
+<script src="node_modules/@emmetio/codemirror-plugin/dist/browser.js"></script>
+<script src="node_modules/codemirror/mode/javascript/javascript.js"></script>
+<script src="node_modules/codemirror/mode/xml/xml.js"></script>
+<div class="messenger-nav-1">
+    <a href="#" class="messenger-nav-1__logo">conectt</a>
+    <ul class="messenger-nav-1__channels ulres">
+        <li class="messenger-nav-1__channel"></li>
+        <li class="messenger-nav-1__channel"></li>
+        <li class="messenger-nav-1__channel"></li>
+        <li class="messenger-nav-1__channel"></li>
+    </ul>
+    <button class="messenger-nav-1__channel-plus"></button>
+</div>
+<div class="messenger-nav-2">
+    <div class="messenger-nav-2__search-block">
+        <div class="messenger-nav-2__search">
+            <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search...">
+            <button class="messenger-nav-2__search-btn"></button>
+        </div>
+        <div class="messenger-nav-2__search-rez">
+            <div class="messenger-nav-2__user1"></div>
+            <div class="messenger-nav-2__user2"></div>
+            <div class="messenger-nav-2__user3"></div>
+        </div>
+    </div>
+    <div class="messenger-nav-2__channels">
+        <h2 class="messenger-nav-2__title">Channels</h2>
+        <ul class="messenger-nav-2__channels-list ulres">
+            <li id="codemirror" class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+        </ul>
+    </div>
+    <div class="messenger-nav-2__friends">
+    </div>
+</div>
+<div class="messenger-main">
+    <div class="messenger-main__header">
+        <div class="messenger-main__chat-preview">
+            <span class="messenger-main__name"></span>
+            <button class="messenger-main__favorite"></button>
+            <button class="messenger-main__delete"></button>
+        </div>
+        <div class="messenger-main__settings">
+            <div class="messenger-nav-2__search ">
+                <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search...">
+                <button class="messenger-nav-2__search-btn"></button>
+            </div>
+            <div class="messenger-nav-2__user1"></div>
+            <button class="messenger-main__notification messenger-main__notification--active"></button>
+            <button class="messenger-main__other"></button>
+        </div>
+    </div>
+    <div class="messenger-main__chat">
+        <ol class="messenger-main__chat-list ulres"></ol>
+    </div>
+    <div class="messenger-main__message">
+        <form action="" id="message">
+            <div class="messenger-main__fails">
+                <button form="message" class="messenger-main__document"></button>
+                <button form="message" class="messenger-main__voice"></button>
+            </div>
+            <div class="messenger-main__message-text" contenteditable="true"></div>
+            <div class="messenger-main__push-block">
+                <div class="messenger-main__emoji-block">
+                    <ol class="messenger-main__emoji-list ulres messenger-main__emoji-list--close"></ol>
+                    <button type="button" class="messenger-main__emoji"></button>
+                </div>
+                <button type="reset" class="messenger-main__push" onclick='sendMessage(`+obj.id+`)'>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="messenger-user">
+    <div class="messenger-user__photo">
+
+    </div>
+    <div class="messenger-user__info">
+        <div class="messenger-user__person">
+            <div class="messenger-user__person--edit">
+                <span class="messenger-user__status">Status</span>
+                <button type="button" class="messenger-user__edit"></button>
+            </div>
+            <div class="status-block" contenteditable="true"></div>
+        </div>
+        <ul class="messenger-user__networks ulres">
+            <li class="messenger-user__link"><a href="#"></a></li>
+            <li class="messenger-user__link messenger-user__link--git"><a href="#"></a></li>
+        </ul>
+        <div class="messenger-user__username-block">
+
+        </div>
+        <div class="messenger-user__username-block messenger-user__username-block-email">
+            <span class="messenger-user__username">Email</span>
+        </div>
+        <div class="messenger-user__btn--cont">
+
+        </div>
+
+    </div>
+</div>
+<script src="js/script.js"></script>
+<script src="js/messenger.js"></script>
+<script src="js/codemirror.js"></script>
+</body>
+</html>
