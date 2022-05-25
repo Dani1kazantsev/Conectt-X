@@ -637,9 +637,7 @@ h3 {
 }
 
 .messenger-main__header {
-    padding: 0 2%;
-    height: 8vh;
-
+    padding: 20px 2%;
     display: flex;
     justify-content: space-between;
     box-sizing: border-box;
@@ -1154,4 +1152,10 @@ h3 {
 .status-block:focus {
     border: .5px solid rgba(255, 255, 255, 24%);
     outline: none;
+}
+
+.code-frame {
+    border: none;
+    width: 100%;
+    height: 40vh;
 }

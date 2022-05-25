@@ -33,7 +33,7 @@ function printIde(){
         <li id="script.js" class="messenger-files__list-item"><img src="img/manifest/icons/file.svg" alt=""> script.js</li></ul></div>`
     document.querySelector('.messenger-files').innerHTML = html;
     document.querySelector('.messenger-main__start-button').addEventListener('click',()=>{
-        html = `<iframe class=""></iframe>`
+        html = `<iframe class="code-frame"></iframe>`
         document.querySelector('.messenger-main__html').innerHTML = html;
         document.querySelector('iframe').setAttribute('srcdoc',editor.getValue())
     })
