@@ -10,12 +10,13 @@ document.querySelector('#codemirror').addEventListener('click',()=>{
     printIde()
 })
 function printIde(){
-    html = '<div class="messenger-main__header">' +
+    let html = '<div class="messenger-main__header">' +
         '<div class="messenger-main__file-name">index.html</div>'
     html += '<div class="messenger-main__container">'
     html += '<button class="messenger-main__start-button">start</button>' +
         '<button class="messenger-main__other"></button>'
     html += '</div></div><textarea id="code" class="codemirror"></textarea>'
+    html += '<div class="messenger-main__html"></div>'
     document.querySelector('.messenger-main').innerHTML = html;
     document.querySelector('.messenger-main__header').style.background = '#202627'
     document.querySelector('.messenger-user').classList = 'messenger-files'
@@ -31,6 +32,11 @@ function printIde(){
         `<li id="index.html" class="messenger-files__list-item active"><img src="img/manifest/icons/file.svg" alt=""> index.html</li>
         <li id="script.js" class="messenger-files__list-item"><img src="img/manifest/icons/file.svg" alt=""> script.js</li></ul></div>`
     document.querySelector('.messenger-files').innerHTML = html;
+    document.querySelector('.messenger-main__start-button').addEventListener('click',()=>{
+        html = `<iframe class=""></iframe>`
+        document.querySelector('.messenger-main__html').innerHTML = html;
+        document.querySelector('iframe').setAttribute('srcdoc',editor.getValue())
+    })
 }
 printIde()
 let keys = []
@@ -46,7 +52,7 @@ window.addEventListener('keyup',(e)=>{
 })
 var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     mode : "text/html",
-    theme:'monokai',
+    theme:'material-ocean',
     lineNumbers:true,
     extraKeys: {
         'Tab': 'emmetExpandAbbreviation',
