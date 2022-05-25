@@ -328,10 +328,21 @@ body {
     align-items: center;
 }
 .messenger-main__start-button{
-    padding: 5px 20px;
+    padding: 0 20px;
+    cursor: pointer;
     border-radius: 5px;
+    line-height: 0;
+    border: none;
+    font: inherit;
+    color: #272727;
     background: #95FFE5;
 }
+.messenger-main__start-button:hover,
+.messenger-main__start-button:active {
+    border: none;
+    outline: none;
+}
+
 .messenger-files{
     width: 15%;
     height: 100vh;
@@ -340,7 +351,7 @@ body {
 }
 .messenger-files__header{
     height: 8vh;
-    padding: 0 2%;
+    padding: 0 1vw;
     display: flex;
     justify-content: space-between;
     background: #2f383b;
@@ -351,8 +362,9 @@ body {
     gap:15px;
 }
 .messenger-files__img{
-    width: 35px;
-    height: 30px;
+    width: 20px;
+    cursor: pointer;
+    height: 20px;
 }
 .messenger-files__list{
     display: flex;
@@ -360,6 +372,7 @@ body {
 }
 .messenger-files__list-item{
     display: flex;
+    cursor: pointer;
     gap: 10px;
     padding: 10px;
     border-bottom: 1px solid white;

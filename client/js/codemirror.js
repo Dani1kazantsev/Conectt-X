@@ -13,7 +13,7 @@ function printIde(){
     let html = '<div class="messenger-main__header">' +
         '<div class="messenger-main__file-name">index.html</div>'
     html += '<div class="messenger-main__container">'
-    html += '<button class="messenger-main__start-button">start</button>' +
+    html += '<button class="messenger-main__start-button">START</button>' +
         '<button class="messenger-main__other"></button>'
     html += '</div></div><textarea id="code" class="codemirror"></textarea>'
     html += '<div class="messenger-main__html"></div>'
