@@ -5,12 +5,14 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" href="img/manifest/icons/logo.svg" sizes="12x12" type="image/x-svg">
-    <link rel="stylesheet" href="css/style.min.css">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="icon" href="src/img/manifest/icons/logo.svg" sizes="12x12" type="image/x-svg">
+    <link rel="stylesheet" href="src/styles/style.min.css">
+    <link rel="stylesheet" href="src/styles/style.css">
     <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="node_modules/codemirror/theme/material-ocean.css">
-    <link rel="stylesheet" href="styles/emmet.css">
+    <link rel="stylesheet" href="src/styles/emmet.css">
+    <script src="src/plugins/axios.js"></script>
+    <script src="src/plugins/socket.io.js" ></script>
     <title>Conectt</title>
 </head>
 <body class="messenger page__body">
@@ -118,8 +120,35 @@
 
     </div>
 </div>
-<script src="js/script.js"></script>
-<script src="js/messenger.js"></script>
-<script src="js/codemirror.js"></script>
+<script src=""></script>
+<script src="src/pagesLogic/codemirror.js"></script>
+<script>
+    axios.create({
+        baseUrl:"http://localhost:5000",
+        withCredentials:true
+    })
+    axios.get('http://localhost:5000/users')
+    const socket = io('http://localhost:500');
+    socket.on('connect', function() {
+        console.log('Connected');
+        // socket.emit('events', { test: 'test' });
+        // socket.emit('identity', 0, response =>
+        //     console.log('Identity:', response),
+        // );
+    });
+    // socket.send(JSON.stringify({
+    //     type: "hello from client",
+    //     content: [ 3, "4" ]
+    // }));
+    socket.on('events', function(data) {
+        console.log('event', data);
+    });
+    socket.on('exception', function(data) {
+        console.log('event', data);
+    });
+    socket.on('disconnect', function() {
+        console.log('Disconnected');
+    });
+</script>
 </body>
 </html>
