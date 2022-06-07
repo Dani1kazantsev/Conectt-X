@@ -13,6 +13,9 @@
 <main class="login-main">
   <div class="login-main__login register">
     <h1 class="login-main__title register__title">Создать учетную запись</h1>
+    <div class="error">
+      <span class="error__message">Такой пользователь уже есть</span>
+    </div>
     <form class="login-main__form register__form" action="src/pagesLogic/register.js">
       <label class="login-main__label" for="email">E-mail</label>
         <input class="login-main__input register__input" id="email" type="email" required>
