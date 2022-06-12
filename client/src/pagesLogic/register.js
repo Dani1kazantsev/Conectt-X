@@ -1,62 +1,60 @@
-let endReg = true;
-document.querySelector('.register-main__btn').addEventListener('click', (e) => {
+function parseJwt(token) {
+    let base64Url = token.split('.')[1];
+    let base64 = decodeURIComponent(atob(base64Url).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(base64);
+};
+let form = document.forms['register-form']
+form.elements.button.addEventListener('click', (e) => {
     e.preventDefault()
-    let loginValue = document.getElementById('name').value;
-    let passwordValue = document.getElementById('password').value;
-    let emailValue = document.getElementById('email').value;
-    if (passwordValue.length < 8) {
+    let loginValue = form.elements.login.value;
+    let passwordValue = form.elements.password.value;
+    let emailValue = form.elements.email.value;
+    if (passwordValue.length < 6) {
         alert("слишком короткий пароль");
         return;
     }
 
-    if(endReg){
-        endReg = false;
-        sendRequest(requestURLusers).then(Users => {
-            for(let i = 0; i< Users.length; i++){
-                if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
-                    alert("Такой логин или почта уже есть");
-                    return;
-                }
-            }
-            let obj = new User(loginValue, passwordValue, emailValue);
-            localStorage.clear();
-            localStorage.setItem('meUser', JSON.stringify(obj));
-            sendRequestPost("POST", requestURLusers, new User(loginValue, passwordValue, emailValue)).then(()=>{
-                endReg = true;
-                location.href = '../../messenger.html';
-            })
-
+    axios.post('/auth/registration', {
+        login: loginValue,
+        email: emailValue,
+        password: passwordValue,
+        avatar: 'asd'
+    }, {withCredentials: true, baseURL: "http://localhost:5000",}).then(response => {
+        localStorage.setItem('token', response.data)
+        debugger
+        myAxios.get(`users/me${parseJwt(response.data).id}`).then(res => {
+            localStorage.setItem('me', JSON.stringify(res.data))
+            location.href = 'messenger.html'
         })
-    }
+        endReg = true
+    })
+
 
 })
-document.querySelector('.register__form').addEventListener('submit', (e) => {
-    e.preventDefault();
-    let loginValue = document.getElementById('name').value;
-    let passwordValue = document.getElementById('password').value;
-    let emailValue = document.getElementById('email').value;
-    if (passwordValue.length < 8) {
+form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    let loginValue = form.elements.login.value;
+    let passwordValue = form.elements.password.value;
+    let emailValue = form.elements.email.value;
+    if (passwordValue.length < 6) {
         alert("слишком короткий пароль");
         return;
     }
-    if(endReg){
-        endReg = false;
-        sendRequest(requestURLusers).then(Users => {
-            for (let i = 0; i < Users.length; i++) {
-                if ((Users[i].Login === loginValue) || (Users[i].Email === emailValue)) {
-                    alert("Такой логин или почта уже есть");
-                    return;
-                }
-            }
-            let obj = new User(loginValue, passwordValue, emailValue);
-            localStorage.clear();
-            localStorage.setItem('meUser', JSON.stringify(obj));
-            sendRequestPost("POST", requestURLusers,obj).then(()=>{
-                endReg = true;
-                location.href = '../../messenger.html';
-            })
 
+    axios.post('auth/registration', {
+        login: loginValue,
+        email: emailValue,
+        password: passwordValue,
+        avatar: 'asd'
+    }, {withCredentials: true, baseURL: "http://localhost:5000",}).then(response => {
+        localStorage.setItem('token', response.data)
+
+        myAxios.get(`users/me${parseJwt(response.data).id}`).then(res => {
+            localStorage.setItem('me', JSON.stringify(res.data))
+            location.href = 'messenger.html'
         })
-    }
-
+    })
 })

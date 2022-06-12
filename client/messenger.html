@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
     <link rel="stylesheet" href="node_modules/codemirror/theme/material-ocean.css">
     <link rel="stylesheet" href="src/styles/emmet.css">
-    <script src="src/plugins/axios.js"></script>
-    <script src="src/plugins/socket.io.js" ></script>
     <title>Conectt</title>
 </head>
 <body class="messenger page__body">
@@ -45,7 +43,7 @@
     <div class="messenger-nav-2__channels">
         <h2 class="messenger-nav-2__title">Channels</h2>
         <ul class="messenger-nav-2__channels-list ulres">
-            <li id="codemirror" class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+            <li id="codemirror" class="messenger-nav-2__channel"><a href="#">#Редактор</a></li>
             <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
             <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
             <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
@@ -120,14 +118,11 @@
 
     </div>
 </div>
-<script src=""></script>
+<script src="src/plugins/axios.js"></script>
+<script src="src/plugins/socket.io.js" ></script>
 <script src="src/pagesLogic/codemirror.js"></script>
+<script src="src/pagesLogic/messenger.js"></script>
 <script>
-    axios.create({
-        baseUrl:"http://localhost:5000",
-        withCredentials:true
-    })
-    axios.get('http://localhost:5000/users')
     const socket = io('http://localhost:500');
     socket.on('connect', function() {
         console.log('Connected');

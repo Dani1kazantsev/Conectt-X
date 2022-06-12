@@ -1,4 +1,4 @@
-import {Body, HttpException, HttpStatus, Injectable, Param} from '@nestjs/common';
+import {BadRequestException, Body, HttpException, HttpStatus, Injectable, Param} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {ServersEntity} from "./servers.entity";
 import {Repository} from "typeorm";
@@ -36,7 +36,7 @@ export class ServersService {
         if(server.users.find(users=>{if(users.id == user.id){
                     return true
         }})){
-            throw new HttpException("Есть такой пользователь",HttpStatus.BAD_REQUEST)
+            throw new BadRequestException("Есть такой пользователь")
         }
         server.users.push(user)
         return this.serversRepository.save(server)

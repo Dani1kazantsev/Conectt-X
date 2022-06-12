@@ -20,7 +20,6 @@ export class WebsocketGateway {
 
   @SubscribeMessage('events')
   findAll(@MessageBody() data: any){
-   console.log(data)
   }
 
   @SubscribeMessage('identity')

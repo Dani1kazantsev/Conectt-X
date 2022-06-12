@@ -1,67 +1,101 @@
-prototypeFunctions()
-let Emoji
-sendRequest('https://conectt.herokuapp.com/images').then(data=>{
-    Emoji = data;
-});
-sendRequest(requestURLusers).then(data => {
-    let me;
-    data.forEach(user=>{
-        if (user.id == JSON.parse(localStorage.meUser).id){
-            me = JSON.parse(localStorage.meUser)
-            me.Messages = user.Messages;
-            me.Avatar = user.Avatar;
-            if(me.Friends.length < user.Friends.length){
-                user.Friends.forEach(friend=>{
-                    if(me.Friends.some(e=>e.Id == friend.Id) == false){
-                        me.Friends.push(friend);
-                    }
-                })
-            }
-            else if(me.Friends.length > user.Friends.length){
-                me.Friends.forEach(friend=>{
-                    if(user.Friends.some(e=>e.Id == friend.Id) == false){
-                        let index = me.Friends.indexOf(friend);
-                        me.Friends.splice(index,1)
-                    }
-                })
-            }
-            localStorage.meUser = JSON.stringify(me);
-            for (let i = 0; i < user.Friends.length; i++) {
-                for (let j = 0; j < data.length; j++){
-                    if(data[j].id === user.Friends[i].Id){
-                        UsersMy.push(data[j])
-                    }
+let me;
+let avatarSrc = `../serv/clientFiles/images/avatars/`
+myAxios.get(`users/me${JSON.parse(localStorage.getItem('me')).id}`).then((res)=>{
+    me = res.data
+    me.avatar = `../serv/clientFiles/images/avatars/${me.avatar}`
+    printAccountInfo(me);
+})
+
+function printChat(userID) {
+    let obj;
+    let user;
+    let html = ``;
+    let message;
+    if(userID == -1){
+        html  += `<div class="messenger-main__header"><div class="messenger-main__chat-preview"><span class="messenger-main__name">None</span>`
+        message = 'Заведи сначала друзей)'
+    }
+
+
+    html += `<button class="messenger-main__favorite"></button><button class="messenger-main__delete"></button></div>
+    <div class="messenger-main__settings"><div class="messenger-nav-2__search">
+    <input type="text" class="messenger-nav-2__search-input" autocomplete="none" placeholder="Search..."><button class="messenger-nav-2__search-btn"></button></div>
+    <div class="messenger-main__notification--block"><ol class="messenger-main__notification-list ulres "></ol><button class="messenger-main__notification"></button></div><button class="messenger-main__other"></button></div></div>`
+
+    html += `<div class="messenger-main__chat"><ol class="messenger-main__chat-list ulres">` + message + `</ol></div>`
+    html += `<div class="messenger-main__message"><form action="" id="message"><div class="messenger-main__fails">
+    <button form="message" class="messenger-main__document"></button><button form="message" class="messenger-main__voice"></button></div>
+    <div class="messenger-main__message-text" data-text="Message" contenteditable="true"></div><div class="messenger-main__push-block"><div class="messenger-main__emoji-block">
+    <ol class="messenger-main__emoji-list ulres "></ol><button type="button" class="messenger-main__emoji"></button></div></button> 
+    <button type="reset" class="messenger-main__push">
+    </button></div></form></div></div>`
+    document.querySelector('.messenger-main').innerHTML = html;
+}
+printChat(-1)
+function printAccountInfo(obj) {
+    if (obj.status == null) {
+        obj.status = ''
+    }
+    document.querySelector('.messenger-user__photo').innerHTML =
+        `<div id="UserPhoto" class="messenger-user__photo--container">` +
+        `<img src="${obj.avatar}" alt="user" class="messenger-user__photo-img">` +
+        ' <label class="messenger-user__btn" for="image__upload"></label> <input id="image__upload" type="file" accept=".png, .jpg, .jpeg" class="messenger-user__input-upload">'
+    html = "<span class='messenger-user__username'>" + obj.login + "</span>";
+    html += `<span id='name-text' class='messenger-user__username-text'>@${obj.login}</span>`;
+    document.querySelector('.messenger-user__username-block').innerHTML = html;
+    document.querySelector('.messenger-user__person').innerHTML =
+        `<h2 id="name" class="messenger-user__name">${obj.login}</h2>` +
+        `<div class="messenger-user__person--edit"><span class="messenger-user__status">Status</span>` +
+        `<button type="button" class="messenger-user__edit"></button>` +
+        `</div><div class="status-block" contenteditable="false">${obj.status}</div>`
+    document.querySelector('.messenger-user__username-block-email').innerHTML =
+        `<span class="messenger-user__username">Email</span><span id="email" class="messenger-user__username-text">${obj.email}</span>`;
+    document.querySelector('.messenger-user__btn--cont').innerHTML = '<a href="index.html" class="messenger-user__message">Выйти</a>'
+
+    document.getElementById('UserPhoto').addEventListener('mouseenter', () => {
+        document.querySelector('.messenger-user__photo--container').classList.add('messenger-user__photo--before');
+        document.querySelector('.messenger-user__btn').style.display = 'block';
+    })
+    document.getElementById('UserPhoto').addEventListener('mouseleave', () => {
+        document.querySelector('.messenger-user__photo--container').classList.remove('messenger-user__photo--before')
+        document.querySelector('.messenger-user__btn').style.display = 'none';
+    })
+    document.getElementById('image__upload').addEventListener('change', () => {
+        let fileList = document.getElementById('image__upload').files;
+        const formData = new FormData()
+        formData.append('avatar', fileList[0])
+        myAxios.put('/users/avatar',
+            formData
+        ).then(response=>{
+            me.avatar = response.data.avatar
+            document.querySelector('.messenger-user__photo-img').src =
+                avatarSrc + response.data.avatar
+        })
+    })
+    document.querySelector('.messenger-user__edit').addEventListener('click', () => {
+        if (document.querySelector('.status-block').contentEditable == "true") {
+            document.querySelector('.messenger-user__edit').style.background = 'url("img/manifest/icons/edit.svg") no-repeat center';
+            document.querySelector('.status-block').contentEditable = "false";
+            obj.Status = document.querySelector('.status-block').innerHTML;
+            localStorage.meUser = JSON.stringify(obj);
+            fetch(requestURLusers + "/" + obj.id, {
+                method: "PATCH",
+                body: JSON.stringify({
+                    Status: document.querySelector('.status-block').innerHTML
+                }),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
                 }
-            }
-        }
-        if (user.Login == JSON.parse(localStorage.meUser).Login) {
-            me = user;
-            if(JSON.parse(localStorage.meUser).id == undefined){
-                localStorage.meUser = JSON.stringify(user);
-            }
-            UsersMy.push(JSON.parse(localStorage.meUser))
-            UserId = JSON.parse(localStorage.meUser).id;
+            })
+        } else {
+            document.querySelector('.messenger-user__edit').style.background = 'url("img/manifest/icons/apply.svg") no-repeat center';
+            document.querySelector('.status-block').contentEditable = "true";
         }
 
     })
-    printAccountInfo(me);
-    printFriend();
-    if(me.Friends.length !== 0){
-        printChat(me.Friends[0].Id);
-    }
-    else{
-        printChat(-1);
-    }
-    if(JSON.parse(localStorage.meUser).id !== undefined){
-        JSON.parse(localStorage.meUser).Friends.forEach(Friend=>{
-            printNotification(Friend.Notification,Friend)
-        });
-    }
-    infoCheck();
+}
 
-})
-
-var results = [];
+let results = [];
 
 class Result {
     Input = "";
@@ -69,6 +103,7 @@ class Result {
     #IndexOfSimilarity = -1;
 
     get IndexOfSimilarity() {
+        debugger
         if (this.#IndexOfSimilarity == -1) {
             this.#IndexOfSimilarity = this.#GetIndexOfSimilarity();
         }
@@ -99,8 +134,8 @@ class Result {
     #GetSimilarityCount(max) {
         let index = 0;
         for (
-            let i = 0;i < max; i++) {
-            if (this.Target.Login[i] == this.Input[i]){
+            let i = 0; i < max; i++) {
+            if (this.Target.login[i] == this.Input[i]) {
                 index++;
             }
         }
@@ -110,12 +145,12 @@ class Result {
 
     #IsSubString() {
         let str =
-            this.Target.Login.length >= this.Input.length
-                ? this.Target.Login
+            this.Target.login.length >= this.Input.length
+                ? this.Target.login
                 : this.Input;
         let substr =
-            this.Target.Login.length < this.Input.length
-                ? this.Target.Login
+            this.Target.login.length < this.Input.length
+                ? this.Target.login
                 : this.Input;
 
         for (let i = 0, k = 0; i < str.length; i++) {
@@ -134,8 +169,8 @@ class Result {
     #GetIndexOfSimilarity() {
 
         let max =
-            this.Target.Login.length >= this.Input.length
-                ? this.Target.Login.length
+            this.Target.login.length >= this.Input.length
+                ? this.Target.login.length
                 : this.Input.length;
         let cur = this.#GetSimilarityCount(max);
         let count = cur / max;
@@ -143,7 +178,7 @@ class Result {
         let isSub = this.#IsSubString() ? 1 : 0;
 
         let inputcount = this.#FindSumbolsCount(this.Input);
-        let targetcount = this.#FindSumbolsCount(this.Target.Login);
+        let targetcount = this.#FindSumbolsCount(this.Target.login);
 
         let prev = targetcount[0].length;
 
@@ -188,7 +223,7 @@ class Result {
 
     ToString() {
         return this.#IndexOfSimilarity > 0
-            ? `<span class="cursor" onclick="addFriend(`+this.Target.id+`)">`+this.Target.Login+`</span>`
+            ? `<span class="cursor" onclick="addFriend(` + this.Target.id + `)">` + this.Target.login + `</span>`
             : "";
     }
 }
@@ -207,11 +242,11 @@ h3.onclick = clicked;
 
 
 function changed() {
-    sendRequest(requestURLusers).then(data => {
+    myAxios.get('users').then(response => {
         results = [];
         words = textarea.value.split(" ");
-        data.forEach((f) => {
-            if(f.id != JSON.parse(localStorage.meUser).id){
+        response.data.forEach((f) => {
+            if (f.id != JSON.parse(localStorage.me).id) {
                 results.push(
                     new Result(words[words.length - 1].toLowerCase(), f)
                 );
@@ -219,7 +254,8 @@ function changed() {
 
         });
 
-        results = results.sort((a, b) => {
+
+        results.sort((a, b) => {
             return a.IndexOfSimilarity > b.IndexOfSimilarity ? -1 : 1;
         });
         if (textarea.value === '') {
@@ -236,10 +272,10 @@ function changed() {
             })
         }
         h1.innerHTML = results[0].ToString();
-        h2.innerHTML = results[1].ToString();
 
     })
 }
+
 function clicked() {
     let word = this.innerHTML.split("<br>")[0];
     words[words.length - 1] = word;
