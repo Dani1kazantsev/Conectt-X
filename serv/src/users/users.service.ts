@@ -94,6 +94,7 @@ export class UsersService {
         delete friend.isActivated
         delete friend.refreshToken
         delete user.password
+
         delete user.activationLink
         delete user.isActivated
         delete user.refreshToken

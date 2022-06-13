@@ -37,7 +37,7 @@ import {SocketEntity} from "./socket/socket.entity";
             port: Number(process.env.MYSQL_PORT),
             username: process.env.MYSQL_USER,
             password: process.env.MYSQL_PASSWORD,
-            database: process.env.MYSQL_DB,
+            database: process.env.MYSQL_DATABASE,
             entities: [UsersEntity, RoleEntity,SocketEntity, MessageEntity, ChannelsEntity, ServersEntity],
             synchronize: true,
         }), GraphQLModule.forRoot<ApolloDriverConfig>({
