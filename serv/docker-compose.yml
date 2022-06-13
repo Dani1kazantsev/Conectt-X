@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  main:
+    container_name: main
+    build:
+      context: .
+    env_file:
+      - .development.env
+    volumes:
+      - ./app
+      - /app/node_modules
+    ports:
+      - 5000:5000
+    command: npm run start:dev
+    depends_on:
+      - mysql
+    restart: always
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    env_file:
+      - .development.env
+    environment:
+      MYSQL_DATABASE: /var/lib/mysql
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_USER: 'mysql'
+      MYSQL_PASS: 'mysql'
+    volumes:
+      - ./:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html class="page" lang="ru" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -13,19 +14,22 @@
 <main class="login-main">
   <div class="login-main__login register">
     <h1 class="login-main__title register__title">Создать учетную запись</h1>
-    <form class="login-main__form register__form" action="src/pagesLogic/register.js">
+    <div class="error">
+      <span class="error__message">Такой пользователь уже есть</span>
+    </div>
+    <form name="register-form" class="login-main__form register__form" action="src/pagesLogic/register.js">
       <label class="login-main__label" for="email">E-mail</label>
-        <input class="login-main__input register__input" id="email" type="email" required>
-      <label class="login-main__label" for="name">Имя</label>
-        <input class="login-main__input  register__input" id="name" type="text" required>
+      <input name="email" class="login-main__input register__input" id="email" type="email" required>
+      <label  class="login-main__label" for="name">Имя</label>
+      <input name="name" class="login-main__input  register__input" id="name" type="text" required>
       <label class="login-main__label" for="password">Пароль</label>
-        <input class="login-main__input register__input" id="password" type="password" required>
-      <button class="login-main__btn register-main__btn" type="submit">Зарегистрироваться</button>
+      <input name="password" class="login-main__input register__input" id="password" type="password" required>
+      <button name="button" class="login-main__btn register-main__btn" type="submit">Зарегистрироваться</button>
       <span class="register__span">У вас уже есть аккаунт?<a class="login-main__reg register__login" href="login.html">Войти</a></span>
     </form>
   </div>
 </main>
-<script src="src/pagesLogic/script.js"></script>
+<script src="src/plugins/axios.js"></script>
 <script src="src/pagesLogic/register.js"></script>
 </body>
 </html>

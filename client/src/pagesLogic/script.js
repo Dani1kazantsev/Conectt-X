@@ -12,7 +12,7 @@ class User {
     Status = "";
     Socials = [];
 
-    constructor(login, password, email,Avatar = "img/manifest/messenger/user.png",
+    constructor(login, password, email,Avatar = "img/manifest/messenger/user1.png",
                 Status = "",
                 Socials = []) {
         this.Login = login;
@@ -491,7 +491,7 @@ function printFriend() {
         if(UsersMy[i].id !== JSON.parse(localStorage.meUser).id){
                 html = ''
                 html += '<ul class="messenger-nav-2__friends-list ulres"><li class="messenger-nav-2__friend" id="messenger-nav-2__friend'+UsersMy[i].id+'"><a href="#">'
-                html += '<img src="img/manifest/messenger/user.png" alt="user"><h2 class="messenger-nav-2__friend--user">' + UsersMy[i].Login + '</h2><span class="message-number message-number'+UsersMy[i].id+'"></span></a></li></ul>'
+                html += '<img src="img/manifest/messenger/user1.png" alt="user"><h2 class="messenger-nav-2__friend--user">' + UsersMy[i].Login + '</h2><span class="message-number message-number'+UsersMy[i].id+'"></span></a></li></ul>'
                 document.querySelector('.messenger-nav-2__friends').insertAdjacentHTML('beforeend',html)
                 document.getElementById('messenger-nav-2__friend'+UsersMy[i].id).addEventListener('click',()=>{
                     printChat(UsersMy[i].id)

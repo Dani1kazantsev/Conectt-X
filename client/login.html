@@ -13,16 +13,19 @@
 <main class="login-main">
   <div class="login-main__login">
     <h1 class="login-main__title">Присоединяйтесь!</h1>
-    <form id="login-main__form" class="login-main__form" action="js/login.js">
+    <form name="loginForm" id="login-main__form" class="login-main__form" action="js/login.js">
       <label class="login-main__label" for="email">Адрес электронной почты</label>
-        <input class="login-main__input" id="email" name="email" type="email" required autocomplete="off" spellcheck="false" maxlength="999">
+      <input class="login-main__input" id="email" name="email" type="email" required autocomplete="off"
+             spellcheck="false" maxlength="999">
       <label class="login-main__label" for="password">Пароль</label>
-        <input class="login-main__input" id="password" name="password" type="password" required autocomplete="off" spellcheck="false" maxlength="999">
-      <button class="login-main__btn" type="submit">Вход</button>
+      <input class="login-main__input" id="password" name="password" type="password" required autocomplete="off"
+             spellcheck="false" maxlength="999">
+      <button name="button" class="login-main__btn" type="submit">Вход</button>
       <span class="login-main__span">Вы еще не с нам? <a class="login-main__reg" href="register.html">Зарегистрироваться</a></span>
     </form>
   </div>
 </main>
-<script src="src/pagesLogic/script.js"></script>
+<script src="src/plugins/axios.js"></script>
+<script src="src/pagesLogic/login.js"></script>
 </body>
 </html>

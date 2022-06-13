@@ -24,12 +24,10 @@ form.elements.button.addEventListener('click', (e) => {
         avatar: 'asd'
     }, {withCredentials: true, baseURL: "http://localhost:5000",}).then(response => {
         localStorage.setItem('token', response.data)
-        debugger
         myAxios.get(`users/me${parseJwt(response.data).id}`).then(res => {
             localStorage.setItem('me', JSON.stringify(res.data))
             location.href = 'messenger.html'
         })
-        endReg = true
     })
 
 
