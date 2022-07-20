@@ -4,42 +4,48 @@ import {ServersEntity} from "./servers.entity";
 import {Repository} from "typeorm";
 import {CreateServerDto} from "../otherwise/DTOS/create-server.dto";
 import {UsersService} from "../users/users.service";
-import {UsersEntity} from "../users/users.entity";
+import {DirectoriesService} from "../directory/directories.service";
+import {DirectoriesEntity} from "../directory/directories.entity";
+
 @Injectable()
 export class ServersService {
     constructor(@InjectRepository(ServersEntity)
-                private serversRepository:Repository<ServersEntity>,
-                private userService:UsersService) {
+                private serversRepository: Repository<ServersEntity>,
+                private usersService: UsersService,
+                private directoriesService:DirectoriesService) {
     }
-    async findById(id){
-        const user = {
-            value:'123',
-            rest:{
 
-            }
+    async findById(id) {
+        const user = {
+            value: '123',
+            rest: {}
         }
-        return await this.serversRepository.findOne({where:{id:id}})
+        return await this.serversRepository.findOne({where: {id: id}})
     }
-    async createServer(serverDto:CreateServerDto){
-        const server = await this.serversRepository.save({...serverDto,linkToServer:`${process.env.API_URL}/servers/addUser:${serverDto.name}`})
-        server.linkToServer = `${process.env.API_URL}/servers/addUser`
+
+    async createServer(serverDto: CreateServerDto) {
+        const server = await this.serversRepository.save(serverDto)
+        server.linkToServer = `${process.env.API_URL}/users/addUserToServer/${server.id}`
+        const directory:DirectoriesEntity = await this.directoriesService.saveDirectory(server.name, serverDto.directory)
+        const user = await this.usersService.getUserById(serverDto.userId)
+        user.servers.push(server)
+        await this.usersService.saveUsers([user])
+        return await this.serversRepository.save({...server,directory:directory})
+    }
+
+    async addUser(id: number, userId: number) {
+        const user = await this.usersService.getUserById(userId)
+        const server = await this.serversRepository.findOne({
+                where:
+                    {
+                        id: id
+                    },
+                relations:{
+                    users:true
+                }
+            }
+        )
+        server.users.push(user)
         return await this.serversRepository.save(server)
     }
-    async addUser(serverId:number,userId:number){
-        const user:UsersEntity = await this.userService.getUserById(userId)
-        const server:ServersEntity = await this.serversRepository.findOne({
-            where: {id: serverId},
-            relations: {
-                users: true
-            }
-        })
-        if(server.users.find(users=>{if(users.id == user.id){
-                    return true
-        }})){
-            throw new BadRequestException("Есть такой пользователь")
-        }
-        server.users.push(user)
-        return this.serversRepository.save(server)
-    }
-
 }

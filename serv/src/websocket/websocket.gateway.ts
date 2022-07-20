@@ -11,15 +11,16 @@ import {SocketService} from "../socket/socket.service";
 import {MessageEntity} from "../message/message.entity";
 import {UsersService} from "../users/users.service";
 
-@WebSocketGateway(500,{
+@WebSocketGateway({
   cors: {
-    origin: '*',
+    origin: ['http://localhost:63342'],
   },
 })
 export class WebsocketGateway {
   constructor(private socketService:SocketService,
               private usersService:UsersService) {
   }
+
   @WebSocketServer()
   server: Server;
 
@@ -27,18 +28,17 @@ export class WebsocketGateway {
   disconnect(client: Socket){
     client.disconnect()
   }
-
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number): Promise<number> {
-    return data;
-
-  }
   @SubscribeMessage('message')
   async mess(@MessageBody() message: MessageEntity, @ConnectedSocket() socket: Socket): Promise<WsResponse<unknown>>{
     const room = await this.socketService.findSocket(message.toUserId)
-    socket.join(room.socketId)
     socket.to(room.socketId).emit('message', {...message,fromServer:true})
     return {event: 'message',data:message}
   }
 
+  @SubscribeMessage('friendAdd')
+  async addFriend(@MessageBody() body, @ConnectedSocket() socket: Socket): Promise<WsResponse<unknown>>{
+    const room = await this.socketService.findSocket(body.friendId)
+    socket.to(room.socketId).emit('friendAdd',{fromServer:true})
+    return
+  }
 }

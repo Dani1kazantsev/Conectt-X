@@ -4,6 +4,8 @@ import {RoleEntity} from "../roles/roles.entity";
 import {MessageEntity} from "../message/message.entity";
 import {ServersEntity} from "../servers/servers.entity";
 import {SocketEntity} from "../socket/socket.entity";
+import {DirectoriesEntity} from "../directory/directories.entity";
+import {UsersService} from "./users.service";
 
 @Entity({
     name: "users"
@@ -47,12 +49,17 @@ export class UsersEntity {
     activationLink: string;
 
     @ApiProperty({example:"1s2s3zx-5-2kgd-asdas3-f2",description:"Рефреш токен"})
-    @Column("varchar",{nullable:true})
+    @Column("varchar",{nullable:true,length:300})
     refreshToken:string
+
 
     @ApiProperty({example:"Я начинающий разработчик,привет",description:"Статус пользователя"})
     @Column("varchar",{default:'',nullable:true})
     status:string
+
+    @ApiProperty({example:"24",description:"Айди пользователя, с которым был открыт чат в последний раз"})
+    @Column("bigint",{default:-1})
+    lastOpenedChat:number
 
     @ManyToMany(()=>RoleEntity)
     @JoinTable()
@@ -60,7 +67,7 @@ export class UsersEntity {
 
     @ManyToMany(()=>MessageEntity)
     @JoinTable()
-    messages:MessageEntity[]
+    messages:Array<MessageEntity>
 
     @ManyToMany(()=>UsersEntity)
     @JoinTable()
@@ -73,4 +80,8 @@ export class UsersEntity {
     @OneToOne(()=> SocketEntity )
     @JoinColumn()
     chat:SocketEntity
+
+    @OneToOne(()=> DirectoriesEntity)
+    @JoinColumn()
+    directory:DirectoriesEntity
 }

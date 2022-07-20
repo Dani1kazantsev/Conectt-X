@@ -14,6 +14,9 @@
   <div class="login-main__login">
     <h1 class="login-main__title">Присоединяйтесь!</h1>
     <form name="loginForm" id="login-main__form" class="login-main__form" action="js/login.js">
+      <div class="error none">
+        <span class="error__message"></span>
+      </div>
       <label class="login-main__label" for="email">Адрес электронной почты</label>
       <input class="login-main__input" id="email" name="email" type="email" required autocomplete="off"
              spellcheck="false" maxlength="999">
@@ -25,6 +28,7 @@
     </form>
   </div>
 </main>
+<script src="node_modules/jwt-decode/build/jwt-decode.js"></script>
 <script src="src/plugins/axios.js"></script>
 <script src="src/pagesLogic/login.js"></script>
 </body>

@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, UseGuards, UsePipes} from '@nestjs/common';
+import {Body, Controller, Get, Post, Put, UseGuards, UsePipes} from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 import {UsersService} from "../users/users.service";
@@ -26,5 +26,12 @@ export class MessageController {
     @Get()
     allMessages(){
         return this.messageService.getMessages()
+    }
+
+    @ApiOperation({summary:"Сохранение изменения сообщений"})
+    @ApiResponse({status:200,type:MessageEntity})
+    @Put('/read')
+    changeMessage(@Body() array:MessageEntity[]){
+        return this.messageService.saveMessages(array)
     }
 }

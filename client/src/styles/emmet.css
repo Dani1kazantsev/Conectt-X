@@ -1,7 +1,6 @@
 /* Sample styles for Emmet UI in CodeMirror editor */
 
 /* Visual clue for marked Emmet abbreviation */
-
 .emmet-abbreviation {
     border-bottom: 1px solid rgba(0, 180, 0, 0.3);
     border-radius: 2px;

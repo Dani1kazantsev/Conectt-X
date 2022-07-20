@@ -31,4 +31,10 @@ export class MessageService {
     async getMessageOfUsers(userId,myId){
         return await this.messageRepository.find({where:[{fromUserId:userId,toUserId:myId},{fromUserId:myId,toUserId:userId}]})
     }
+    async saveMessages(arr){
+        for(let msg of arr){
+            this.messageRepository.save(arr)
+        }
+        return true
+    }
 }

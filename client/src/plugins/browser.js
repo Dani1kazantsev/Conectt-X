@@ -5502,7 +5502,7 @@
                     // and merge arguments
                     const match = resolveKeyword(token.name, config, snippet, minScore);
                     if (match && match.type === 'FunctionCall') {
-                        value.push(Object.assign(Object.assign({}, match), { arguments: token.arguments.concat(match.arguments.slice(token.arguments.length)) }));
+                        value.push(Object.assign(Object.assign({}, match), { arguments: token.arguments.concat(match['arguments'].slice(token.arguments.length)) }));
                     }
                     else {
                         value.push(token);

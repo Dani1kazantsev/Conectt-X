@@ -8,12 +8,12 @@ import {UsersModule} from "../users/users.module";
     providers: [TokensService],
     imports:[
         JwtModule.register({
-            secret: process.env.PRIVATE_KEY ,
+            secret: process.env.PRIVATE_KEY || 'SECRET',
             signOptions:{
                 expiresIn:'24h'
             }
         }),forwardRef(() => UsersModule)
     ],
-    exports:[TokensService]
+    exports:[TokensService,JwtModule]
 })
 export class TokensModule {}

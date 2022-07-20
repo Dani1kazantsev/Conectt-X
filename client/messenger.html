@@ -21,12 +21,9 @@
 <div class="messenger-nav-1">
     <a href="#" class="messenger-nav-1__logo">conectt</a>
     <ul class="messenger-nav-1__channels ulres">
-        <li class="messenger-nav-1__channel"></li>
-        <li class="messenger-nav-1__channel"></li>
-        <li class="messenger-nav-1__channel"></li>
-        <li class="messenger-nav-1__channel"></li>
+        <li class="messenger-nav-1__channel main active"></li>
     </ul>
-    <button class="messenger-nav-1__channel-plus"></button>
+    <a href="#server-popup" class="messenger-nav-1__channel-plus popup_link"></a>
 </div>
 <div class="messenger-nav-2">
     <div class="messenger-nav-2__search-block">
@@ -43,10 +40,7 @@
     <div class="messenger-nav-2__channels">
         <h2 class="messenger-nav-2__title">Channels</h2>
         <ul class="messenger-nav-2__channels-list ulres">
-            <li id="codemirror" class="messenger-nav-2__channel"><a href="#">#Редактор</a></li>
-            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
-            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
-            <li class="messenger-nav-2__channel"><a href="#">#channel</a></li>
+
         </ul>
     </div>
     <div class="messenger-nav-2__friends">
@@ -118,9 +112,73 @@
 
     </div>
 </div>
+<div id="server-popup" class="server-popup popup">
+    <div class="server-popup__body">
+        <div class="server-popup__content">
+            <button class="server-popup__btn close-popup"></button>
+            <h1 class="server-popup__title">Создать сервер</h1>
+            <h2 class="server-popup__text server-popup__text-info">На сервере вы сможете общаться с друзьями, писать код
+                и много другое.</h2>
+            <h2 class="server-popup__text server-popup__text-margin">Выберите тип сервера:</h2>
+            <div class="server-popup__create server-popup__create-editor">
+                <div class="server-popup__container">
+                    <img src="src/img/manifest/messenger/ide.svg" alt="Ide" class="server-popup__img">
+                    <p class="server-popup__text ">Редактор кода</p>
+                </div>
+                <div class="server-popup__arrow"></div>
+            </div>
+            <p class="server-popup__subtitle">Тут вы сможете редактировать код вместе с друзьями и обсуждать его.</p>
+            <div class="server-popup__create server-popup__create-normal">
+                <div class="server-popup__container">
+                    <img src="src/img/manifest/messenger/server.svg" alt="" class="server-popup__img">
+                    <p class="server-popup__text ">Обычный сервер</p>
+                </div>
+                <div class="server-popup__arrow"></div>
+            </div>
+            <p class="server-popup__subtitle">Обычный сервер для общения и игр с друзьями.</p>
+            <h2 class="server-popup__text server-popup__text-margin">Хотите присоединиться к серверу?</h2>
+            <form class="server-popup__form" name="server-popup__form">
+                <label for="link">Введите ссылку на сервер:</label>
+                <input id="link" name="link" class="server-popup__input">
+            </form>
+        </div>
+    </div>
+</div>
+<div id="server-popup-settings" class="server-popup popup">
+    <div class="server-popup__body">
+        <div class="server-popup__content server-popup-settings__content">
+            <button class="close-popup"></button>
+            <h1 class="server-popup__title">Создать сервер</h1>
+            <h2 class="server-popup__text server-popup__text-info server-popup-settings__text-info">Пришел черед
+                украсить свой сервер!</h2>
+            <h2 class="server-popup__text server-popup__text-margin server-popup-settings__text-margin">Выберите
+                аватарку и название для сервера</h2>
+            <div class="server-popup__avatar-container">
+                <label class="image-upload__label server-popup__label" for="server-image__upload">
+                    <img class="image-upload__img" src="src/img/manifest/icons/upload-photo.svg" alt="">
+                </label>
+                <input id="server-image__upload" type="file"
+                       accept=".png, .jpg, .jpeg"
+                       class="messenger-user__input-upload image-upload">
+            </div>
+            <form class="server-popup__form server-popup-settings__form" name="server-popup-settings__form">
+                <label for="name">Введите название сервера:</label>
+                <input id="name" name="name" class="server-popup__input">
+            </form>
+            <div class="server-popup__container-btn">
+                <a href="#server-popup" class="server-popup__cancel-button popup_link">Назад</a>
+                <button class="login-main__btn  server-popup__create-button">Создать</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<script src="node_modules/jwt-decode/build/jwt-decode.js"></script>
 <script src="src/plugins/axios.js"></script>
-<script src="src/plugins/socket.io.js" ></script>
+<script src="src/plugins/socket.io.js"></script>
 <script src="src/pagesLogic/codemirror.js"></script>
 <script src="src/pagesLogic/messenger.js"></script>
+<script src="src/pagesLogic/popups.js"></script>
 </body>
 </html>

@@ -60,25 +60,20 @@ body {
     z-index: 2;
     background: rgba(0, 0, 0, 0.40);
 }
-.messenger-user__btn{
+.image-upload__label{
     display: none;
     position: absolute;
-    width: 50px;
-    height: 50px;
-    background: url("../img/manifest/icons/upload-photo.svg") no-repeat center;
-    background-size: contain;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
-    left: 50%;
-    top: 50%;
     z-index: 3;
-    transform: translate(-50%, -50%)
 }
 
 .messenger-user__photo--container {
     display: flex;
 }
 
-.messenger-user__input-upload {
+.image-upload {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -90,7 +85,14 @@ body {
     clip: rect(0 0 0 0);
     overflow: hidden;
 }
-
+.image-upload__img{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px   ;
+}
 .messenger-main__chat-list {
     display: flex;
     gap: 10px;
@@ -376,4 +378,7 @@ body {
     gap: 10px;
     padding: 10px;
     border-bottom: 1px solid white;
+}
+.user__photo-img {
+    width: 100%;
 }

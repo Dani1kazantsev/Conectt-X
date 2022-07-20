@@ -105,6 +105,10 @@ h3 {
     display: none
 }
 
+.none-opacity {
+    opacity: 0;
+}
+
 .ulres {
     margin: 0;
     padding: 0;
@@ -548,7 +552,7 @@ h3 {
     width: 100%;
     margin-bottom: 2%;
     padding: 2% 0;
-    border: 0;
+    border: 1px solid transparent;
     border-radius: 4px;
     font: inherit;
     background: #95ffe5;
@@ -833,12 +837,12 @@ h3 {
     display: flex;
     width: 42px;
     height: 42px;
-    background: url(../img/manifest/messenger/channel.svg) no-repeat;
+    background: url(../img/manifest/messenger/server.svg) no-repeat;
     background-size: contain;
     cursor: pointer
 }
 
-.messenger-nav-1__channel:first-child::before {
+.active::before {
     position: absolute;
     left: -10px;
     display: block;
@@ -857,7 +861,7 @@ h3 {
     padding: 0;
     border: 0;
     border-radius: 100%;
-    background: url(../img/manifest/messenger/chennel-plus.svg) no-repeat;
+    background: url(../img/manifest/messenger/server-plus.svg) no-repeat;
     background-size: cover;
     cursor: pointer
 }
@@ -1043,9 +1047,11 @@ h3 {
     background: url(../img/manifest/messenger/git.svg) no-repeat;
     background-size: cover
 }
-.messenger-user__btn--cont{
+
+.messenger-user__btn--cont {
     width: 100%;
 }
+
 .messenger-user__message {
     border: 0;
     outline: 0;
@@ -1176,4 +1182,190 @@ h3 {
 .error__message {
     font: inherit;
     color: #dc143c;
+}
+
+.ide {
+    background: url("../img/manifest/messenger/ide.svg");
+}
+
+.server-popup {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.56);
+    left: 0px;
+    top: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 1000ms ease 0s;
+}
+.server-popup.open {
+    opacity: 1;
+    visibility: visible;
+}
+.server-popup__body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+.server-popup__content {
+    position: relative;
+    left: -1000px;
+    background: #2F383B;
+    font-weight: bold;
+    color: #B5B5B5;
+    width: 20%;
+    padding: 15px 10px 30px 10px;
+    text-align: center;
+    border-radius: 6px;
+    min-height: 500px;
+    transition: 1000ms ease 0s;
+}
+.server-popup.open .server-popup__content{
+    left: 0px;
+}
+.close-popup{
+    background: url("../img/manifest/icons/close.svg");
+    color:  #2F383B;
+    background-size: cover;
+    width: 15px;
+    height: 15px;
+    border: 0;
+    cursor: pointer;
+    float: right;
+    align-self: flex-end;
+}
+.server-popup__title {
+    font-size: 24px;
+}
+
+.server-popup__text {
+    font-size: 18px;
+    color: #B5B5B5;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.server-popup__text-info {
+    color: rgba(181, 181, 181, 0.58);
+    margin: auto;
+    margin-top: 15px;
+}
+
+.server-popup__text-margin {
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.server-popup__create {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    background: rgba(39, 39, 39, 0.1);
+    border: 0.5px solid rgba(149, 255, 229, 0.47);
+    box-shadow: inset 0px 0px 4px -1px rgba(39, 39, 39, 0.51);
+    border-radius: 3px;
+    width: 95%;
+    cursor: pointer;
+    margin: 15px auto 0;
+}
+.server-popup__container{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.server-popup__avatar {
+    border-radius: 50%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-self: center;
+    width: 150px;
+    height: 150px;
+}
+
+.server-popup__subtitle {
+    font-size: 12px;
+    line-height: 15px;
+    color: rgba(181, 181, 181, 0.50);
+}
+
+.server-popup__arrow {
+    background: url("../img/manifest/icons/arrow-right.svg");
+    background-size: cover;
+    align-self: center;
+    width: 10px;
+    height:16px;
+
+}
+.server-popup__form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.server-popup__form > label {
+    font-size: 14px;
+    color: #B5B5B5;
+    font-weight: 400;
+}
+
+.server-popup__input {
+    width: 100%;
+    padding: 5px;
+    border: 0.5px solid rgba(149, 255, 229, 0.47);
+    background: none;
+    border-radius: 3px;
+    color: #b5b5b5;
+}
+.server-popup__input:active{
+    border: 0.5px solid rgba(149, 255, 229, 0.47);
+}
+.server-popup-settings__text-info{
+    margin: 0;
+}
+.server-popup__avatar-container{
+    display: flex;
+    align-items: center;
+    margin:15px auto;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.server-popup__avatar-container--before{
+    position: relative;
+}
+.server-popup__avatar-container--before::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.4);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    z-index: 2;
+}
+.server-popup-settings__form{
+    margin-top: 50px;
+}
+.server-popup__container-btn{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+.server-popup__create-button{
+    float: right;
+    width: 100px;
+    font-size: 12px;
+}
+.server-popup__cancel-button{
+    font-size: 14px;
+    cursor: pointer;
+    padding:2% 0;
+    color: #b5b5b5;
 }

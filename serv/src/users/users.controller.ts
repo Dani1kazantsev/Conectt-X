@@ -13,14 +13,12 @@ import {
     UsePipes
 } from '@nestjs/common';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {CreateUserDto} from "../otherwise/DTOS/create-user.dto";
 import {UsersService} from "./users.service";
 import {UsersEntity} from "./users.entity";
 import {AddUserRolesDto} from "../otherwise/DTOS/add-user_roles.dto";
 import {Roles} from "../auth/roles-auth.decorator";
 import {RolesGuard} from "../auth/guards/roles.guard";
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
-import {ValidationPipe} from "../otherwise/pipes/validation.pipe";
 import {AddFriendDto} from "../otherwise/DTOS/add-friend.dto";
 import {TokensService} from "../tokens/tokens.service";
 import {FileInterceptor} from "@nestjs/platform-express";
@@ -30,6 +28,7 @@ import * as path from "path";
 import {CreateMessageDto} from "../otherwise/DTOS/create-message.dto";
 import {MessageEntity} from "../message/message.entity";
 import {SocketDto} from "../otherwise/DTOS/socket.dto";
+import {unnecessaryAttributes} from "../otherwise/helpers/constants";
 @ApiTags('Пользователи')
 @Controller('users')
 export class UsersController {
@@ -85,7 +84,7 @@ export class UsersController {
             storage: diskStorage({
                 destination: path.resolve(__dirname,'../../clientFiles/images/avatars'),
                 filename: (req,file,cb) =>{
-                    const fileName = path.parse(file.originalname).name.replace(/\s/g,'') + uuidv4() + req['user'].id
+                    const fileName = uuidv4() + req['user'].id
                     const extension = path.parse(file.originalname).ext
 
                     cb(null,`${fileName}${extension}`)
@@ -103,8 +102,8 @@ export class UsersController {
     @Get('me:id')
     @UseGuards(JwtAuthGuard)
     async getMe(@Param('id') id){
-        let user = await this.usersService.getUserById(id)
-        return {login:user.login,email:user.email,id:user.id,roles:user.roles,firstName:user.firstName,lastName:user.lastName,avatar:user.avatar,friends:user.friends,status:user.status,chat:user.chat}
+        let user = await this.usersService.getMeById(id)
+        return this.usersService.filterUser(user,unnecessaryAttributes)
     }
 
     @ApiOperation({summary:"Отправка сообщений"})
@@ -129,5 +128,27 @@ export class UsersController {
     @UseGuards(JwtAuthGuard)
     async updateSocket(@Body()dto,@Req() req){
         return await this.usersService.updateChat(dto.socketId,req.user.id)
+    }
+    @ApiOperation({summary:"Обновление статуса"})
+    @ApiResponse({status:200,type:UsersEntity})
+    @Put('/status')
+    @UseGuards(JwtAuthGuard)
+    async updateStatus(@Body()dto,@Req() req){
+        return await this.usersService.updateStatus(dto.status,req.user.id)
+    }
+
+    @ApiOperation({summary:"Обновление последнего открытого чата"})
+    @ApiResponse({status:200,type:UsersEntity})
+    @Put('/lastOpenedChat')
+    @UseGuards(JwtAuthGuard)
+    async updateLastOpenedChat(@Body()chatId,@Req() req){
+        return this.usersService.updateOpenedChat(chatId,req.user.id)
+    }
+
+    @ApiOperation({summary:"Получение аватарок"})
+    @ApiResponse({status:200,type:UsersEntity})
+    @Get('/avatar:id')
+    async GetAvatar(@Param('id') id){
+        return this.usersService.getAvatar(id)
     }
 }

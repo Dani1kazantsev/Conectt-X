@@ -25,4 +25,8 @@ export class MessageEntity {
     @ApiProperty({example:"12.02.03",description:"Время сообщения"})
     @Column("varchar")
     data:string
+
+    @ApiProperty({example:"Прочитано //true",description:"Прочитано или нет"})
+    @Column("boolean",{default:false})
+    readed:boolean
 }

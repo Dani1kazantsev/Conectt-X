@@ -18,8 +18,12 @@ import {ChannelsEntity} from "./channels/channels.entity";
 import {ServersEntity} from "./servers/servers.entity";
 import {WebsocketModule} from './websocket/websocket.module';
 import {WebsocketGateway} from './websocket/websocket.gateway';
-import { SocketModule } from './socket/socket.module';
+import {SocketModule} from './socket/socket.module';
 import {SocketEntity} from "./socket/socket.entity";
+import {FilesModule} from './files/files.module';
+import {FilesEntity} from "./files/files.entity";
+import {DirectoriesModule} from './directory/directories.module';
+import {DirectoriesEntity} from "./directory/directories.entity";
 
 @Module({
     controllers: [],
@@ -38,18 +42,18 @@ import {SocketEntity} from "./socket/socket.entity";
             username: process.env.MYSQL_USER,
             password: process.env.MYSQL_PASSWORD,
             database: process.env.MYSQL_DATABASE,
-            entities: [UsersEntity, RoleEntity,SocketEntity, MessageEntity, ChannelsEntity, ServersEntity],
+            entities: [UsersEntity, RoleEntity, SocketEntity, MessageEntity, ChannelsEntity, ServersEntity, FilesEntity, DirectoriesEntity],
             synchronize: true,
         }), GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: true,
             sortSchema: true,
             cors: {
-                origin: true,
+                origin: process.env.CLIENT_URL,
                 credentials: true
             },
 
-        }), UsersModule, RolesModule, AuthModule, MessageModule, ServersModule, ChannelsModule, WebsocketModule, SocketModule]
+        }), UsersModule, RolesModule, AuthModule, MessageModule, ServersModule, ChannelsModule, WebsocketModule, SocketModule, FilesModule, DirectoriesModule]
 })
 export class AppModule {
 }

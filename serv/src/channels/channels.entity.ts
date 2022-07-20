@@ -1,7 +1,8 @@
-import {Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {ApiProperty} from "@nestjs/swagger";
-import {UsersEntity} from "../users/users.entity";
 import {ServersEntity} from "../servers/servers.entity";
+import {FilesEntity} from "../files/files.entity";
+import {DirectoriesEntity} from "../directory/directories.entity";
 
 
 @Entity({name:"channels"})
@@ -19,8 +20,12 @@ export class ChannelsEntity {
     @Column("varchar")
     name: string;
 
-
     @ManyToOne(()=>ServersEntity,(server)=> server.channels)
     server:ServersEntity
 
+    @OneToMany(() => FilesEntity, (files) => files.channel)
+    files:FilesEntity[]
+
+    @OneToMany(() => DirectoriesEntity, (directories) => directories.channel)
+    directories:DirectoriesEntity[]
 }

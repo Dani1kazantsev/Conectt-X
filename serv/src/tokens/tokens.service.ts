@@ -11,8 +11,7 @@ export class TokensService {
                 ) {
     }
     generateToken(user:UsersEntity){
-        const payload = {login:user.login,email:user.email,id:user.id,roles:user.roles,firstName:user.firstName,lastName:user.lastName,avatar:user.avatar,friends:user.friends,status:user.status}
-
+        const payload = {login:user.login,email:user.email,id:user.id}
         return{
             accessToken:this.jwtService.sign(payload,{
                 expiresIn:'1d',
@@ -22,6 +21,23 @@ export class TokensService {
                 expiresIn:'30d',
                 secret:process.env.JWT_REFRESH_SECRET
             })
+
+        }
+    }
+    async validateRefreshToken(token){
+        try {
+            const userData =this.jwtService.verify(token, {secret:process.env.JWT_REFRESH_SECRET})
+            return userData
+        }catch (e){
+            return null
+        }
+    }
+    async validateAccessToken(token){
+        try {
+            const userData = this.jwtService.verify(token, {secret:process.env.JWT_ACCESS_SECRET})
+            return userData
+        }catch (e){
+            return null
         }
     }
     async refreshToken(refreshToken){

@@ -17,7 +17,6 @@ import {SocketModule} from "../socket/socket.module";
     providers: [UsersService, UsersResolver],
     controllers: [UsersController],
     imports: [forwardRef(() => TokensModule),
-        forwardRef(() => AuthModule),
         MessageModule, RolesModule,SocketModule,
         TypeOrmModule.forFeature([UsersEntity, RoleEntity, MessageEntity,SocketEntity])
     ], exports: [UsersService]

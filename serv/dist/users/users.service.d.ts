@@ -1,0 +1,34 @@
+import { UsersEntity } from "./users.entity";
+import { CreateUserDto } from "../otherwise/DTOS/create-user.dto";
+import { Repository } from "typeorm";
+import { RolesService } from "../roles/roles.service";
+import { MessageService } from "../message/message.service";
+import { CreateMessageDto } from "../otherwise/DTOS/create-message.dto";
+import { SocketService } from "../socket/socket.service";
+import { SocketDto } from "../otherwise/DTOS/socket.dto";
+export declare class UsersService {
+    private userRepository;
+    private rolesService;
+    private messageService;
+    protected socketService: SocketService;
+    constructor(userRepository: Repository<UsersEntity>, rolesService: RolesService, messageService: MessageService, socketService: SocketService);
+    createUser(dto: CreateUserDto): Promise<any>;
+    getAllUsers(): Promise<UsersEntity[]>;
+    addRoleToUser(roleValue: string, userId: number): Promise<UsersEntity>;
+    getUserByEmail(email: string): Promise<UsersEntity>;
+    getUserByParams(params: Array<object>): Promise<UsersEntity>;
+    getMeById(id: number): Promise<UsersEntity>;
+    getUserById(id: number): Promise<UsersEntity>;
+    saveUsers(users: UsersEntity[]): Promise<UsersEntity[]>;
+    filterUser(user: any, arrayOfAttributes: any): any;
+    addFriend(myId: any, userId: any): Promise<UsersEntity>;
+    refreshToken(): Promise<void>;
+    activateAccount(link: any): Promise<UsersEntity>;
+    uploadAvatar(file: any, myId: any): Promise<UsersEntity>;
+    sendMessages(messageDto: CreateMessageDto): Promise<CreateMessageDto & import("../message/message.entity").MessageEntity>;
+    createChat(socketDto: SocketDto, myId: any): Promise<UsersEntity>;
+    updateChat(socketId: any, myId: any): Promise<import("../socket/socket.entity").SocketEntity>;
+    updateStatus(status: any, myId: any): Promise<UsersEntity>;
+    updateOpenedChat(dto: any, myId: any): Promise<UsersEntity>;
+    getAvatar(id: any): Promise<string>;
+}
